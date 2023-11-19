@@ -2,7 +2,7 @@ const fs = require('fs');
 const { exec } = require('child_process');
 
 // Run the nyc command
-exec('npm run istanbul', (error, stdout, stderr) => {
+exec('npx nyc --reporter=json --report-dir=./coverage node main.js', (error, stdout, stderr) => {
     if (error) {
         console.log(`Error: ${error.message}`);
         return;
