@@ -1,0 +1,11 @@
+a > 0 || b == 2 && c == 3: true
+a > 0 || b == 2 && c == 3: true
+a > 0: true
+b == 2: true
+c == 3: true
+a > 0: true
+b == 2: false
+c == 3: true
+condition1>0: Error: condition1 is not defined
+condition2==2: Error: condition2 is not defined
+c == 3: true

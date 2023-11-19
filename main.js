@@ -1,11 +1,15 @@
 // Your function to test
+const fs = require('fs');
 function testConditions(a, b, c) {
 
-    console.log("a is " + a);
-    console.log("b is " + b);
-    console.log("c is " + c);
-    
     if (a > 0 || b == 2 && c == 3) {
+        return true;
+    }
+
+    if(a == 0 && b == 1 || c == 2) {
+        return true;
+    }
+    else if (a == 1 && b == 2 || c == 3) {
         return true;
     }
      else {
@@ -13,4 +17,5 @@ function testConditions(a, b, c) {
     }
 }
 
-module.exports = testConditions;
+testConditions(1, 2, 3);
+
