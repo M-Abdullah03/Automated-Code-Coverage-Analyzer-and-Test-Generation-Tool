@@ -1,5 +1,18 @@
 {
-  "condition1": true,
-  "condition2": true,
-  "condition3": true
+    "condition0": {
+        "a == 0": true,
+        "b == 1": true,
+        "c == 2": true,
+        "condition0": {
+            "a == 1": false,
+            "condition0": {
+                "b == 2": false
+            }
+        }
+    },
+    "condition1": {
+        "a == 1": false,
+        "b == 2": false,
+        "c == 3": false
+    }
 }

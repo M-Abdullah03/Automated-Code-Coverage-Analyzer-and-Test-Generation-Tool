@@ -1,12 +1,13 @@
 // Your function to test
-const fs = require('fs');
 function testConditions(a, b, c) {
 
-    if (a > 0 || b == 2 && c == 3) {
-        return true;
-    }
-
     if(a == 0 && b == 1 || c == 2) {
+        if(a == 1) {
+            if(b == 2) {
+                return true;
+            }
+            return true;
+        }
         return true;
     }
     else if (a == 1 && b == 2 || c == 3) {
@@ -17,5 +18,6 @@ function testConditions(a, b, c) {
     }
 }
 
-testConditions(1, 2, 3);
+// module.exports = testConditions;
 
+testConditions(0, 1, 2);
