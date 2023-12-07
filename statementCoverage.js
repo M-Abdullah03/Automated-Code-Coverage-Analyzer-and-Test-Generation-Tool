@@ -62,7 +62,7 @@ const checkCoverage = async () => {
 
         // Get the line numbers that were executed
         let executedLines = fc.getLineCoverage();
-        //console.log(`Executed lines in ${f}:`, Object.keys(executedLines).filter(line => executedLines[line] > 0));
+        //    console.log(`Executed lines in ${f}:`, Object.keys(executedLines).filter(line => executedLines[line] > 0));
         executedLine = executedLines;
     });
 
@@ -87,21 +87,22 @@ const getCoverage = async (functionName, paramsSet) => {
     //store copy of file
     fs.copyFileSync(fileName, fileName + '.bak');
 
-    paramsSet.forEach(params => {
-        const paramsString = Object.values(params).join(',');
+    // Build up all the function calls in memory
+    const functionCalls = paramsSet.map(params => {
+        const paramsString = params.join(',');
+        return `${functionName}(${paramsString});\n`;
+    }).join('');
 
-        const functionCall = `${functionName}(${paramsString});\n`;
+    // Write all the function calls to the file at once
+    fs.appendFileSync(fileName, functionCalls);
 
-        fs.appendFileSync(fileName, functionCall);
-    });
-
+    // Run the coverage check
     const coverage = checkCoverage();
 
-    //restore file
+    // Restore file
     fs.copyFileSync(fileName + '.bak', fileName);
 
     return coverage;
-
 };
 
 
@@ -115,7 +116,7 @@ getCoverage('testConditions', [
 // Usage
 console.log(functionInfo);
 
-console.log(getCoverage(functionInfo[0].functionName, [ [1, 2, 2], [1, 3, 2], [0, 1, 3] ]));
+console.log(getCoverage(functionInfo[0].functionName, [[0, 1, 2]]));
 
 module.exports.getFunctionInfo = getFunctionInfo;
 module.exports.getCoverage = getCoverage;
