@@ -10,9 +10,16 @@ const func = getFunctionInfo('main.js');
 console.log(func);
 
 func.forEach(async (f) => {
-    let set = await runGA(numGenerations, populationSize, f);
+    let bestIndividual = await runGA(numGenerations, populationSize, f);
 
-    for (let i = 0; i < set.length; i++) {
-        console.log("Set " + i + ": " + set[i].values.join(" "));
+    if(bestIndividual.coverage[0] === 100) {
+        console.log("Function " + f.functionName + " is fully covered");
+
+        for (let i = 0; i < bestIndividual.set.length; i++) {
+            console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
+        }
+
+    } else {
+        console.log("Function " + f.functionName + " is not fully covered");
     }
 });

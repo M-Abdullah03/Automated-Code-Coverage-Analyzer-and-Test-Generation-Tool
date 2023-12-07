@@ -16,5 +16,3 @@ function testConditions(a, b, c) {
         return false;
     }
 }
-testConditions(33,-800610.5156266342,-71);
-testConditions(391653.43015046424,-50,0);

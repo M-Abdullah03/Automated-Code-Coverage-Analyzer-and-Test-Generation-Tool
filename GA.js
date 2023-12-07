@@ -233,7 +233,7 @@ async function runGA(numGenerations, population, func_json) {
     //     console.log("Lines: " + bestIndividual.setLines[i].lines.join(" "));
     // }
 
-    return bestIndividual.set;
+    return bestIndividual;
 }
 
 // const numGenerations = 100;
