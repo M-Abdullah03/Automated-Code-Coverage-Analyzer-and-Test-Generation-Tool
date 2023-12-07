@@ -18,7 +18,7 @@ const getFunctionInfo = (filename) => {
     const ast = esprima.parseScript(code, { range: true });
 
     const functionInfo = [];
-
+    const literals = [];
     // Traverse the AST
     estraverse.traverse(ast, {
         enter: function (node) {
@@ -32,13 +32,20 @@ const getFunctionInfo = (filename) => {
                     parametersLength
                 });
             }
+            else if (node.type === 'Literal') {
+                // Add the literal value to the literals array
+                literals.push(node.value);
+            }
         }
     });
-
-    return functionInfo;
+    //filter out duplicates
+    let newLs=literals.filter((item, index) => literals.indexOf(item) === index);
+    //filter out non-numbers
+    newLs=literals.filter(item => typeof item === 'number');
+    return {functionInfo, literals: newLs};
 }
 
-
+console.log(getFunctionInfo('main.js'));
 // // Run the nyc command
 const checkCoverage = () => {
     global.__coverage__ = {};
