@@ -1,6 +1,17 @@
-function validateNumbers(a) {
-    if(a == 3) {
+// Your function to test
+function testConditions(a, b, c) {
+    if(a == 1 && b == 2 || c == 2) {
+        if(a == 1) {
+            if(b == 2) {
+                return true;
+            }
+            return true;
+        }
+    }
+    else if (a == 0 && b == 2 || c == 3) {
         return true;
     }
-    return false;
+    else {
+        return false;
+    }
 }

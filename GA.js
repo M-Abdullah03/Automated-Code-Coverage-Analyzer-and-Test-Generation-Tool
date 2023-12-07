@@ -86,7 +86,7 @@ function generateRandomValues(individual) {
 
                 if(p === 0) {
 
-                    const prob = Math.floor(Math.random() * 8);
+                    const prob = Math.floor(Math.random() * 7);
 
                     switch (prob) {
                         case 0:
@@ -126,6 +126,8 @@ function generateRandomValues(individual) {
 function mutate(individual) {
     const size = individual.set.length;
     const ran = Math.floor(Math.random() * size);
+    const size2 = individual.set[ran].values.length;
+    const ran2 = Math.floor(Math.random() * size2);
 
     const rand = Math.floor(Math.random() * 7);
 
@@ -135,19 +137,19 @@ function mutate(individual) {
 
         switch (prob) {
             case 0:
-                individual.set[ran].values[ran] = ((Math.random() * 1000000) + 101) * -1;
+                individual.set[ran].values[ran2] = ((Math.random() * 1000000) + 101) * -1;
                 break;
             case 1:
-                individual.set[ran].values[ran] = (Math.floor(Math.random() * 100) + 1) * -1;
+                individual.set[ran].values[ran2] = (Math.floor(Math.random() * 100) + 1) * -1;
                 break;
             case 2:
-                individual.set[ran].values[ran] = 0;
+                individual.set[ran].values[ran2] = 0;
                 break;
             case 3:
-                individual.set[ran].values[ran] = Math.floor(Math.random() * 100) + 1;
+                individual.set[ran].values[ran2] = Math.floor(Math.random() * 100) + 1;
                 break;
             case 4:
-                individual.set[ran].values[ran] = ((Math.random() * 1000000) + 101);
+                individual.set[ran].values[ran2] = ((Math.random() * 1000000) + 101);
                 break;
         }
     }
@@ -161,25 +163,25 @@ function mutate(individual) {
 
             switch (prob) {
                 case 0:
-                    individual.set[ran].values[ran] = (Math.floor(Math.random() * 100) + 1) * -1;
+                    individual.set[ran].values[ran2] = (Math.floor(Math.random() * 100) + 1) * -1;
                     break;
                 case 1:
-                    individual.set[ran].values[ran] = 0;
+                    individual.set[ran].values[ran2] = 0;
                     break;
                 case 2:
-                    individual.set[ran].values[ran] = Math.floor(Math.random() * 100) + 1;
+                    individual.set[ran].values[ran2] = Math.floor(Math.random() * 100) + 1;
                     break;
                 case 3:
-                    individual.set[ran].values[ran] = (Math.floor(Math.random() * 10) + 1) * -1;
+                    individual.set[ran].values[ran2] = (Math.floor(Math.random() * 10) + 1) * -1;
                     break;
                 case 4:
-                    individual.set[ran].values[ran] = Math.floor(Math.random() * 10) + 1;
+                    individual.set[ran].values[ran2] = Math.floor(Math.random() * 10) + 1;
                     break;
                 case 5:
-                    individual.set[ran].values[ran] = (Math.floor(Math.random() * 5) + 1) * -1;
+                    individual.set[ran].values[ran2] = (Math.floor(Math.random() * 5) + 1) * -1;
                     break;
                 case 6:
-                    individual.set[ran].values[ran] = Math.floor(Math.random() * 5) + 1;
+                    individual.set[ran].values[ran2] = Math.floor(Math.random() * 5) + 1;
                     break;
             }
         }
@@ -187,7 +189,7 @@ function mutate(individual) {
             const inner_size = literals.length;
             const prob = Math.floor(Math.random() * inner_size);
 
-            individual.set[ran].values[ran] = literals[prob];
+            individual.set[ran].values[ran2] = literals[prob];
         }
     }
 }
@@ -303,7 +305,9 @@ async function runGA(numGenerations, population, func_json, lit) {
             for (let j = 0; j < func_json.parametersLength; j++) {
                 populations[i].set[ss - 1].values.push(0);
             }
+            //console.log('Before pushing:', populations[i].set[ss - 1].values);
             generateRandomValues(populations[i]);
+            //console.log('After pushing:', populations[i].set[ss - 1].values);
         }
     }
 
