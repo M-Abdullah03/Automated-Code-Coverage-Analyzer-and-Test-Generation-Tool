@@ -1,17 +1,17 @@
-// Your function to test
-function testConditions(a, b, c) {
-    if(a == 1 && b == 2 || c == 2) {
-        if(a == 1) {
-            if(b == 2) {
+function validateNumbers(a, b, c) {
+    if(a % 2 == 0 && b % 2 != 0 || c > 50) {
+        if(a % 2 == 0) {
+            if(b % 2 != 0) {
                 return true;
             }
             return true;
         }
     }
-    else if (a == 0 && b == 2 || c == 3) {
+    else if (a % 2 != 0 && b % 2 == 0 || c <= 50) {
         return true;
     }
     else {
         return false;
     }
 }
+
