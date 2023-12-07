@@ -17,6 +17,4 @@ function testConditions(a, b, c) {
         return false;
     }
 }
-testConditions(0, 1, 2);
-testConditions(1, 2, 3);
-testConditions(1, 2, 2);
+testConditions(0,1,2);

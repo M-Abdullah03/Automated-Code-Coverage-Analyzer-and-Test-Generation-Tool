@@ -3,8 +3,10 @@ const fs = require('fs');
 const libCoverage = require('istanbul-lib-coverage');
 const esprima = require('esprima');
 const estraverse = require('estraverse');
+let fileName;
 
-function getFunctionInfo(filename) {
+const getFunctionInfo = (filename) => {
+    fileName = filename;
     // Read the file
     const code = fs.readFileSync(filename, 'utf8');
 
@@ -31,12 +33,10 @@ function getFunctionInfo(filename) {
 
     return functionInfo;
 }
-// Usage
-const functionInfo = getFunctionInfo('main.js');
-console.log(functionInfo);
+
 
 // // Run the nyc command
-const getCoverage = () => {
+const checkCoverage = () => {
     exec('npx nyc --reporter=json --report-dir=./coverage node main.js', (error, stdout, stderr) => {
         if (error) {
             console.log(`Error: ${error.message}`);
@@ -86,3 +86,23 @@ const getCoverage = () => {
 
     });
 };
+
+
+const getCoverage = (functionName, paramsSet) => {
+    paramsSet.forEach(params => {
+        const paramsString = Object.values(params).join(',');
+
+        const functionCall = `${functionName}(${paramsString});\n`;
+
+        fs.appendFileSync(fileName, functionCall);
+    });
+};
+const functionInfo = getFunctionInfo('main.js');
+//Example call
+getCoverage('testConditions', [
+    [0, 1, 2],
+
+]);
+// Usage
+console.log(functionInfo);
+
