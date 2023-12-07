@@ -16,3 +16,4 @@ function testConditions(a, b, c) {
         return false;
     }
 }
+testConditions(33,-800610.5156266342,-71);

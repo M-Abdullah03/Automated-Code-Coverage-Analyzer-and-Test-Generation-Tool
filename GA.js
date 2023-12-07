@@ -139,7 +139,7 @@ async function runGA(numGenerations, population, func_json) {
 
                 //console.log(populations[i].set);
 
-                populations[i].coverage[0] = getCoverage(func_json.functionName, populations[i].set);
+                populations[i].coverage[0] = await getCoverage(func_json.functionName, populations[i].set);
 
                 console.log("Generation " + generation + " Coverage " + i + ": " + populations[i].coverage[0]);
 

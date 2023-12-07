@@ -36,7 +36,7 @@ const getFunctionInfo = (filename) => {
 
 
 // // Run the nyc command
-const checkCoverage = () => {
+const checkCoverage = async () => {
     try {
         execSync('npx nyc --reporter=json --report-dir=./coverage node main.js')
     } catch (e) {
@@ -77,13 +77,13 @@ const checkCoverage = () => {
         "lines": executedLine
     };
 
-    fs.writeFileSync("coverage.json", JSON.stringify(coverage));
+    // fs.writeFileSync("coverage.json", JSON.stringify(coverage));
 
     return summary.toJSON().statements.pct;
 };
 
 
-const getCoverage = (functionName, paramsSet) => {
+const getCoverage = async (functionName, paramsSet) => {
     //store copy of file
     fs.copyFileSync(fileName, fileName + '.bak');
 
