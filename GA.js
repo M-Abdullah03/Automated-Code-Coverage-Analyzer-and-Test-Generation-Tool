@@ -113,14 +113,16 @@ function crossover(individual1, individual2) {
     }
 }
 
-function runGA(numGenerations, population) {
+function runGA(numGenerations, population, func_json) {
     const populations = [];
     let ss = 1;
 
     for (let i = 0; i < population; i++) {
         const individual = new Individual();
         individual.set.push(new Value());
-        individual.set[ss - 1].values.push(0, 0);
+        for (let j = 0; j < func_json.parameters; j++) {
+            individual.set[ss - 1].values.push(0);
+        }
         //console.log('Before pushing:', individual.set[ss - 1].values);
         generateRandomValues(individual);
         //console.log('After pushing:', individual.set[ss - 1].values);
@@ -132,6 +134,8 @@ function runGA(numGenerations, population) {
             const fitnesses = new Array(population);
 
             for (let i = 0; i < population; i++) {
+
+                populations[i].coverage[0] = getCoverage(func_json.function_name, populations[i].set);
 
                 for (let s = 0; s < populations[i].set.length; s++) {
                     populations[i].coverage[s] = Math.floor((Math.random() * 100) + 1);
@@ -195,7 +199,9 @@ function runGA(numGenerations, population) {
         ss++;
         for (let i = 0; i < population; i++) {
             populations[i].set.push(new Value());
-            populations[i].set[ss - 1].values.push(0, 0);
+            for (let j = 0; j < func_json.parameters; j++) {
+                populations[i].set[ss - 1].values.push(0);
+            }
             generateRandomValues(populations[i]);
         }
     }
@@ -225,4 +231,10 @@ function runGA(numGenerations, population) {
 const numGenerations = 100;
 const populationSize = 100;
 
-runGA(numGenerations, populationSize);
+const func ={
+    function_name: "testConditions",
+    parameters: 3
+}
+
+
+runGA(numGenerations, populationSize, func);

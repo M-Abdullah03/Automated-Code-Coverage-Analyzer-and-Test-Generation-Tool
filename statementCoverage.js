@@ -82,8 +82,7 @@ const getCoverage = () => {
 
         fs.writeFileSync("coverage.json", JSON.stringify(coverage));
 
+        return summary.toJSON().statements.pct;
+
     });
 };
-
-
-
