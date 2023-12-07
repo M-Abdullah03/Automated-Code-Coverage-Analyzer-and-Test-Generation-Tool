@@ -1,8 +1,41 @@
 const { exec } = require('child_process');
 const fs = require('fs');
 const libCoverage = require('istanbul-lib-coverage');
+const esprima = require('esprima');
+const estraverse = require('estraverse');
 
-// Run the nyc command
+function getFunctionInfo(filename) {
+    // Read the file
+    const code = fs.readFileSync(filename, 'utf8');
+
+    // Parse the code into an AST
+    const ast = esprima.parseScript(code, { range: true });
+
+    const functionInfo = [];
+
+    // Traverse the AST
+    estraverse.traverse(ast, {
+        enter: function(node) {
+            if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
+                // Get the function name and parameters length
+                const functionName = node.id ? node.id.name : 'anonymous function';
+                const parametersLength = node.params.length;
+
+                functionInfo.push({
+                    functionName,
+                    parametersLength
+                });
+            }
+        }
+    });
+
+    return functionInfo;
+}
+// Usage
+const functionInfo = getFunctionInfo('main.js');
+console.log(functionInfo);
+
+// // Run the nyc command
 exec('npx nyc --reporter=json --report-dir=./coverage node main.js', (error, stdout, stderr) => {
     if (error) {
         console.log(`Error: ${error.message}`);

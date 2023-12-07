@@ -17,7 +17,6 @@ function testConditions(a, b, c) {
         return false;
     }
 }
-
-// module.exports = testConditions;
-
 testConditions(0, 1, 2);
+testConditions(1, 2, 3);
+testConditions(1, 2, 2);
