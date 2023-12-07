@@ -8,12 +8,12 @@ function testConditions(a, b, c) {
             }
             return true;
         }
-        return true;
     }
-    else if (a == 1 && b == 2 || c == 3) {
+    else if (a == 0 && b == 2 || c == 3) {
         return true;
     }
      else {
         return false;
     }
 }
+testConditions(76,-675007.1708504527,64);

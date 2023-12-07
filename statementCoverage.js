@@ -108,14 +108,14 @@ const getCoverage = (functionName, paramsSet) => {
 const functionInfo = getFunctionInfo('main.js');
 //Example call
 getCoverage('testConditions', [
-    [0, 1, 2],
+    [1, 1, 2],
     [1, 2, 3]
 
 ]);
 // Usage
 console.log(functionInfo);
 
-console.log(getCoverage(functionInfo[0].functionName, [ [0, 1, 2], [1, 2, 3] ]));
+console.log(getCoverage(functionInfo[0].functionName, [ [1, 2, 2], [1, 3, 2], [0, 1, 3] ]));
 
 module.exports.getFunctionInfo = getFunctionInfo;
 module.exports.getCoverage = getCoverage;
