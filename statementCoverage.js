@@ -41,6 +41,7 @@ const getFunctionInfo = (filename) => {
 
 // // Run the nyc command
 const checkCoverage = () => {
+    global.__coverage__ = {};
    // Create a new instrumenter
    const instrumenter = new istanbul.Instrumenter();
 
@@ -50,6 +51,7 @@ const checkCoverage = () => {
 
    // Execute the instrumented code
    vm.runInThisContext(instrumentedCode);
+   
 
    // Generate the coverage report
    const collector = new istanbul.Collector();
