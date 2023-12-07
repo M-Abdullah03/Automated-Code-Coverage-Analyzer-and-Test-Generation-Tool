@@ -1,4 +1,4 @@
-const getCoverage = require('./statementCoverage');
+const {getCoverage} = require('./statementCoverage');
 
 class Line {
     constructor() {
@@ -115,7 +115,7 @@ function crossover(individual1, individual2) {
     }
 }
 
-function runGA(numGenerations, population, func_json) {
+async function runGA(numGenerations, population, func_json) {
     const populations = [];
     let ss = 1;
 
@@ -137,22 +137,22 @@ function runGA(numGenerations, population, func_json) {
 
             for (let i = 0; i < population; i++) {
 
-                populations[i].coverage[0] = getCoverage(func_json.function_name, populations[i].set);
+                populations[i].coverage[0] = await getCoverage(func_json.function_name, populations[i].set);
 
-                for (let s = 0; s < populations[i].set.length; s++) {
-                    populations[i].coverage[s] = Math.floor((Math.random() * 100) + 1);
+                // for (let s = 0; s < populations[i].set.length; s++) {
+                //     populations[i].coverage[s] = Math.floor((Math.random() * 100) + 1);
 
-                    const line = new Line();
+                //     const line = new Line();
 
-                    for (let j = 0; j < 10; j++) {
-                        line.lines.push(Math.floor(Math.random() * 100));
-                    }
+                //     for (let j = 0; j < 10; j++) {
+                //         line.lines.push(Math.floor(Math.random() * 100));
+                //     }
 
-                    populations[i].setLines[s] = line;
+                //     populations[i].setLines[s] = line;
 
-                    const fitness = fitnessFunction(populations[i]);
-                    fitnesses[i] = fitness;
-                }
+                //     const fitness = fitnessFunction(populations[i]);
+                //     fitnesses[i] = fitness;
+                // }
             }
 
             //sort by fitness in descending order
@@ -228,6 +228,8 @@ function runGA(numGenerations, population, func_json) {
         console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
         console.log("Lines: " + bestIndividual.setLines[i].lines.join(" "));
     }
+
+    return bestIndividual.set;
 }
 
 // const numGenerations = 100;
@@ -241,4 +243,4 @@ function runGA(numGenerations, population, func_json) {
 
 // runGA(numGenerations, populationSize, func);
 
-module.exports = runGA;
+module.exports.runGA = runGA;
