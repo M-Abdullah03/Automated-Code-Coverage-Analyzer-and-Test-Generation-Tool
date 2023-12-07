@@ -62,12 +62,12 @@ const checkCoverage = () => {
 
         // Get the line numbers that were executed
         let executedLines = fc.getLineCoverage();
-        console.log(`Executed lines in ${f}:`, Object.keys(executedLines).filter(line => executedLines[line] > 0));
+    //    console.log(`Executed lines in ${f}:`, Object.keys(executedLines).filter(line => executedLines[line] > 0));
         executedLine = executedLines;
     });
 
     // Output coverage summary
-    console.log(summary.toJSON());
+    //console.log(summary.toJSON());
 
     let coverage = {
         // "lines": summary.toJSON().lines.pct,
@@ -99,6 +99,7 @@ const getCoverage = (functionName, paramsSet) => {
     //restore file
     fs.copyFileSync(fileName + '.bak', fileName);
 
+
 };
 
 
@@ -112,7 +113,7 @@ getCoverage('testConditions', [
 // Usage
 console.log(functionInfo);
 
-console.log(getCoverage(functionInfo[0].functionName, [ [0, 1, 2], [1, 2, 3] ]));
+console.log(getCoverage(functionInfo[0].functionName, [ [0, 1, 2] ]));
 
 module.exports.getFunctionInfo = getFunctionInfo;
 module.exports.getCoverage = getCoverage;
