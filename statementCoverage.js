@@ -39,50 +39,49 @@ const getFunctionInfo = (filename) => {
         }
     });
     //filter out duplicates
-    let newLs=literals.filter((item, index) => literals.indexOf(item) === index);
+    let newLs = literals.filter((item, index) => literals.indexOf(item) === index);
     //filter out non-numbers
-    newLs=literals.filter(item => typeof item === 'number');
-    return {functionInfo, literals: newLs};
+    newLs = literals.filter(item => typeof item === 'number');
+    return { functionInfo, literals: newLs };
 }
 
-console.log(getFunctionInfo('main.js'));
 // // Run the nyc command
 const checkCoverage = () => {
     global.__coverage__ = {};
-   // Create a new instrumenter
-   const instrumenter = new istanbul.Instrumenter();
+    // Create a new instrumenter
+    const instrumenter = new istanbul.Instrumenter();
 
-   // Instrument the code
-   const code = fs.readFileSync(path.resolve(fileName), 'utf-8');
-   const instrumentedCode = instrumenter.instrumentSync(code, fileName);
+    // Instrument the code
+    const code = fs.readFileSync(path.resolve(fileName), 'utf-8');
+    const instrumentedCode = instrumenter.instrumentSync(code, fileName);
 
-   // Execute the instrumented code
-   vm.runInThisContext(instrumentedCode);
-   
+    // Execute the instrumented code
+    vm.runInThisContext(instrumentedCode);
 
-   // Generate the coverage report
-   const collector = new istanbul.Collector();
-   collector.add(global.__coverage__);
 
-   const reporter = new istanbul.Reporter();
-   reporter.addAll(['json']);
-   reporter.write(collector, true, () => {
-   });
+    // Generate the coverage report
+    const collector = new istanbul.Collector();
+    collector.add(global.__coverage__);
 
-   // Read the coverage report
-   let coverageReport = JSON.parse(fs.readFileSync('./coverage/coverage-final.json', 'utf8'));
+    const reporter = new istanbul.Reporter();
+    reporter.addAll(['json']);
+    reporter.write(collector, true, () => {
+    });
 
-   // Create a coverage map
-   let coverageMap = libCoverage.createCoverageMap(coverageReport);
+    // Read the coverage report
+    let coverageReport = JSON.parse(fs.readFileSync('./coverage/coverage-final.json', 'utf8'));
 
-   // Calculate coverage summary
-   let summary = libCoverage.createCoverageSummary();
-   coverageMap.files().forEach(function (f) {
-       let fc = coverageMap.fileCoverageFor(f);
-       summary.merge(fc.toSummary());
-   });
-   
-   return summary.toJSON().statements.pct;
+    // Create a coverage map
+    let coverageMap = libCoverage.createCoverageMap(coverageReport);
+
+    // Calculate coverage summary
+    let summary = libCoverage.createCoverageSummary();
+    coverageMap.files().forEach(function (f) {
+        let fc = coverageMap.fileCoverageFor(f);
+        summary.merge(fc.toSummary());
+    });
+
+    return summary.toJSON().statements.pct;
 };
 
 const getCoverage = (functionName, paramsSet) => {
@@ -108,7 +107,7 @@ const getCoverage = (functionName, paramsSet) => {
     const coverage = checkCoverage();
 
     // Restore file
-    fs.copyFileSync(fileName + '.bak', fileName);
+   fs.copyFileSync(fileName + '.bak', fileName);
 
     return coverage;
 };
@@ -121,7 +120,7 @@ const functionInfo = getFunctionInfo('main.js');
 // Usage
 // console.log(functionInfo);
 
-// console.log(getCoverage(functionInfo[0].functionName, [[0, 1, 2], [1, 1, 2]]));
+console.log(getCoverage(functionInfo.functionInfo[0].functionName, [[4, 3, 60], [2, 8, 50], [5, 4, 40], [3, 7, 50]]));
 
 module.exports.getFunctionInfo = getFunctionInfo;
 module.exports.getCoverage = getCoverage;
