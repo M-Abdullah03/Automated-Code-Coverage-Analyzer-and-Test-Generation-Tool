@@ -1,6 +1,5 @@
 // Your function to test
 function testConditions(a, b, c) {
-
     if(a == 1 && b == 2 || c == 2) {
         if(a == 1) {
             if(b == 2) {
@@ -16,4 +15,6 @@ function testConditions(a, b, c) {
         return false;
     }
 }
-testConditions(76,-675007.1708504527,64);
+
+
+testConditions(51,-978062.9574333851,74);
