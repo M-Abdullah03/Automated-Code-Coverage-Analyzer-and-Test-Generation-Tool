@@ -89,6 +89,9 @@ const checkCoverage = () => {
 
 
 const getCoverage = (functionName, paramsSet) => {
+    //store copy of file
+    fs.copyFileSync(fileName, fileName + '.bak');
+
     paramsSet.forEach(params => {
         const paramsString = Object.values(params).join(',');
 
@@ -96,11 +99,18 @@ const getCoverage = (functionName, paramsSet) => {
 
         fs.appendFileSync(fileName, functionCall);
     });
+    checkCoverage();
+    //restore file
+    fs.copyFileSync(fileName + '.bak', fileName);
+    
 };
+
+
 const functionInfo = getFunctionInfo('main.js');
 //Example call
 getCoverage('testConditions', [
     [0, 1, 2],
+    [1, 2, 3]
 
 ]);
 // Usage
