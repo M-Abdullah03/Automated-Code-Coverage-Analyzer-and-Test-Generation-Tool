@@ -122,7 +122,7 @@ async function runGA(numGenerations, population, func_json) {
     for (let i = 0; i < population; i++) {
         const individual = new Individual();
         individual.set.push(new Value());
-        for (let j = 0; j < func_json.parameters; j++) {
+        for (let j = 0; j < func_json.parametersLength; j++) {
             individual.set[ss - 1].values.push(0);
         }
         //console.log('Before pushing:', individual.set[ss - 1].values);
@@ -137,7 +137,11 @@ async function runGA(numGenerations, population, func_json) {
 
             for (let i = 0; i < population; i++) {
 
-                populations[i].coverage[0] = await getCoverage(func_json.function_name, populations[i].set);
+                //console.log(populations[i].set);
+
+                populations[i].coverage[0] = getCoverage(func_json.functionName, populations[i].set);
+
+                console.log("Generation " + generation + " Coverage " + i + ": " + populations[i].coverage[0]);
 
                 // for (let s = 0; s < populations[i].set.length; s++) {
                 //     populations[i].coverage[s] = Math.floor((Math.random() * 100) + 1);
@@ -201,7 +205,7 @@ async function runGA(numGenerations, population, func_json) {
         ss++;
         for (let i = 0; i < population; i++) {
             populations[i].set.push(new Value());
-            for (let j = 0; j < func_json.parameters; j++) {
+            for (let j = 0; j < func_json.parametersLength; j++) {
                 populations[i].set[ss - 1].values.push(0);
             }
             generateRandomValues(populations[i]);
@@ -213,7 +217,7 @@ async function runGA(numGenerations, population, func_json) {
 
     for (let i = 0; i < population; i++) {
         const fitness = fitnessFunction(populations[i]);
-        console.log("Fitness " + i + ": " + fitness);
+        //console.log("Fitness " + i + ": " + fitness);
 
         if (fitness > bestFitness) {
             bestFitness = fitness;
@@ -221,13 +225,13 @@ async function runGA(numGenerations, population, func_json) {
         }
     }
 
-    console.log("Best fitness: " + bestFitness);
-    console.log("Best individual: ");
+    // console.log("Best fitness: " + bestFitness);
+    // console.log("Best individual: ");
 
-    for (let i = 0; i < bestIndividual.set.length; i++) {
-        console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
-        console.log("Lines: " + bestIndividual.setLines[i].lines.join(" "));
-    }
+    // for (let i = 0; i < bestIndividual.set.length; i++) {
+    //     console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
+    //     console.log("Lines: " + bestIndividual.setLines[i].lines.join(" "));
+    // }
 
     return bestIndividual.set;
 }
