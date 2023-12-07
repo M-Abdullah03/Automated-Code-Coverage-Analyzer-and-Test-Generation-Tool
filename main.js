@@ -1,6 +1,5 @@
 // Your function to test
 function testConditions(a, b, c) {
-
     if(a == 1 && b == 2 || c == 2) {
         if(a == 1) {
             if(b == 2) {

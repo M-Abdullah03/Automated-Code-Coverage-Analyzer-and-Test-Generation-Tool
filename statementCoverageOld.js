@@ -1,12 +1,8 @@
+const { execSync, exec } = require('child_process');
 const fs = require('fs');
 const libCoverage = require('istanbul-lib-coverage');
 const esprima = require('esprima');
 const estraverse = require('estraverse');
-const path = require('path');
-const vm = require('vm');
-const istanbul = require('istanbul');
-
-
 let fileName;
 
 const getFunctionInfo = (filename) => {
@@ -41,81 +37,67 @@ const getFunctionInfo = (filename) => {
 
 // // Run the nyc command
 const checkCoverage = () => {
-   // Create a new instrumenter
-   const instrumenter = new istanbul.Instrumenter();
+    try {
+        execSync('npx nyc --reporter=text --report-dir=./coverage node main.js')
+    } catch (e) {
+        console.log(`Error: ${e.message}`);
+        return;
+    };
 
-   // Instrument the code
-   const code = fs.readFileSync(path.resolve(fileName), 'utf-8');
-   const instrumentedCode = instrumenter.instrumentSync(code, fileName);
+    // Read the coverage report
+    let coverageReport = JSON.parse(fs.readFileSync('./coverage/coverage-final.json', 'utf8'));
 
-   // Execute the instrumented code
-   vm.runInThisContext(instrumentedCode);
+    // Create a coverage map
+    let coverageMap = libCoverage.createCoverageMap(coverageReport);
 
-   // Generate the coverage report
-   const collector = new istanbul.Collector();
-   collector.add(global.__coverage__);
+    // Calculate coverage summary
+    let summary = libCoverage.createCoverageSummary();
+    coverageMap.files().forEach(function (f) {
+        let fc = coverageMap.fileCoverageFor(f);
+        summary.merge(fc.toSummary());
 
-   const reporter = new istanbul.Reporter();
-   reporter.addAll(['json']);
-   reporter.write(collector, true, () => {
-   });
+    });
 
-   // Read the coverage report
-   let coverageReport = JSON.parse(fs.readFileSync('./coverage/coverage-final.json', 'utf8'));
-
-   // Create a coverage map
-   let coverageMap = libCoverage.createCoverageMap(coverageReport);
-
-   // Calculate coverage summary
-   let summary = libCoverage.createCoverageSummary();
-   coverageMap.files().forEach(function (f) {
-       let fc = coverageMap.fileCoverageFor(f);
-       summary.merge(fc.toSummary());
-   });
-   
-   return summary.toJSON().statements.pct;
+    return summary.toJSON().statements.pct;
 };
-
-
-const getCoverage = async (functionName, paramsSet) => {
-    //store copy of file
+const getCoverage = (functionName, paramsSet) => {
+    // Store copy of file
     fs.copyFileSync(fileName, fileName + '.bak');
 
     // Build up all the function calls in memory
+    console.log("Received",paramsSet);
     const functionCalls = paramsSet.map(params => {
         let paramsString;
-        if (params.values.length > 0) {
+        if(params.values.length > 0){
             paramsString = params.values.join(',');
         }
-        else {
+        else{
             paramsString = params.join(',');
         }
         return `${functionName}(${paramsString});\n`;
     }).join('');
 
-        const functionCall = `${functionName}(${paramsString});\n`;
+    // Write all the function calls to the file at once
+    fs.appendFileSync(fileName, functionCalls);
 
-        fs.appendFileSync(fileName, functionCall);
-    });
-
+    // Run the coverage check
     const coverage = checkCoverage();
 
-    //restore file
+    // Restore file
     fs.copyFileSync(fileName + '.bak', fileName);
 
     return coverage;
-
 };
 
 
 const functionInfo = getFunctionInfo('main.js');
 //Example call
-// getCoverage('testConditions', [[1, 1, 2]]);
+//getCoverage('testConditions', [[1, 1, 2], [1, 2, 3]]);
 
 // Usage
 // console.log(functionInfo);
 
-console.log(getCoverage(functionInfo[0].functionName, [[0, 1, 2], [1, 1, 2]]));
+console.log(getCoverage(functionInfo[0].functionName, [[0, 1, 2]]));
 
 module.exports.getFunctionInfo = getFunctionInfo;
 module.exports.getCoverage = getCoverage;
