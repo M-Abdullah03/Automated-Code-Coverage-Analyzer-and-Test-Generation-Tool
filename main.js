@@ -18,3 +18,4 @@ function testConditions(a, b, c) {
     }
 }
 testConditions(0,1,2);
+testConditions(0,1,2);
