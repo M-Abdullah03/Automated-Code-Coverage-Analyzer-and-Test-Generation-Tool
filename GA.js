@@ -1,4 +1,4 @@
-const {getCoverage} = require('./statementCoverage');
+const {getCoverage} = require('./statementCoverage.js');
 
 class Line {
     constructor() {
@@ -20,6 +20,8 @@ class Individual {
         this.size = 0;
     }
 }
+
+let literals = [];
 
 function compareLines(line1, line2) {
     const range = Math.min(line1.lines.length, line2.lines.length);
@@ -48,29 +50,73 @@ function fitnessFunction(individual) {
 
 function generateRandomValues(individual) {
     const size = individual.set.length;
-
     for (let i = 0; i < size; i++) {
         const size2 = individual.set[i].values.length;
 
         for (let j = 0; j < size2; j++) {
-            const prob = Math.floor(Math.random() * 5);
 
-            switch (prob) {
-                case 0:
-                    individual.set[i].values[j] = ((Math.random() * 1000000) + 101) * -1;
-                    break;
-                case 1:
-                    individual.set[i].values[j] = (Math.floor(Math.random() * 100) + 1) * -1;
-                    break;
-                case 2:
-                    individual.set[i].values[j] = 0;
-                    break;
-                case 3:
-                    individual.set[i].values[j] = Math.floor(Math.random() * 100) + 1;
-                    break;
-                case 4:
-                    individual.set[i].values[j] = ((Math.random() * 1000000) + 101);
-                    break;
+            const ran = Math.floor(Math.random() * 7);
+
+            if(ran === 0) {
+
+                const prob = Math.floor(Math.random() * 5);
+
+                switch (prob) {
+                    case 0:
+                        individual.set[i].values[j] = ((Math.random() * 1000000) + 101) * -1;
+                        break;
+                    case 1:
+                        individual.set[i].values[j] = (Math.floor(Math.random() * 100) + 1) * -1;
+                        break;
+                    case 2:
+                        individual.set[i].values[j] = 0;
+                        break;
+                    case 3:
+                        individual.set[i].values[j] = Math.floor(Math.random() * 100) + 1;
+                        break;
+                    case 4:
+                        individual.set[i].values[j] = ((Math.random() * 1000000) + 101);
+                        break;
+                }
+            }
+            else {
+
+                const p = Math.floor(Math.random() * 3);
+
+                if(p === 0) {
+
+                    const prob = Math.floor(Math.random() * 7);
+
+                    switch (prob) {
+                        case 0:
+                            individual.set[i].values[j] = (Math.floor(Math.random() * 100) + 1) * -1;
+                            break;
+                        case 1:
+                            individual.set[i].values[j] = 0;
+                            break;
+                        case 2:
+                            individual.set[i].values[j] = Math.floor(Math.random() * 100) + 1;
+                            break;
+                        case 3:
+                            individual.set[i].values[j] = (Math.floor(Math.random() * 10) + 1) * -1;
+                            break;
+                        case 4:
+                            individual.set[i].values[j] = Math.floor(Math.random() * 10) + 1;
+                            break;
+                        case 5:
+                            individual.set[i].values[j] = (Math.floor(Math.random() * 5) + 1) * -1;
+                            break;
+                        case 6:
+                            individual.set[i].values[j] = Math.floor(Math.random() * 5) + 1;
+                            break;
+                    }
+                }
+                else {
+                    const inner_size = literals.length;
+                    const prob = Math.floor(Math.random() * inner_size);
+
+                    individual.set[i].values[j] = literals[prob];
+                }
             }
         }
     }
@@ -79,24 +125,69 @@ function generateRandomValues(individual) {
 function mutate(individual) {
     const size = individual.set.length;
     const ran = Math.floor(Math.random() * size);
-    const prob = Math.floor(Math.random() * 5);
 
-    switch (prob) {
-        case 0:
-            individual.set[ran].values[ran] = ((Math.random() * 1000000) + 101) * -1;
-            break;
-        case 1:
-            individual.set[ran].values[ran] = (Math.floor(Math.random() * 100) + 1) * -1;
-            break;
-        case 2:
-            individual.set[ran].values[ran] = 0;
-            break;
-        case 3:
-            individual.set[ran].values[ran] = Math.floor(Math.random() * 100) + 1;
-            break;
-        case 4:
-            individual.set[ran].values[ran] = ((Math.random() * 1000000) + 101);
-            break;
+    const rand = Math.floor(Math.random() * 7);
+
+    if(rand === 0) {
+
+        const prob = Math.floor(Math.random() * 5);
+
+        switch (prob) {
+            case 0:
+                individual.set[ran].values[ran] = ((Math.random() * 1000000) + 101) * -1;
+                break;
+            case 1:
+                individual.set[ran].values[ran] = (Math.floor(Math.random() * 100) + 1) * -1;
+                break;
+            case 2:
+                individual.set[ran].values[ran] = 0;
+                break;
+            case 3:
+                individual.set[ran].values[ran] = Math.floor(Math.random() * 100) + 1;
+                break;
+            case 4:
+                individual.set[ran].values[ran] = ((Math.random() * 1000000) + 101);
+                break;
+        }
+    }
+    else {
+
+        const p = Math.floor(Math.random() * 3);
+
+        if(p === 0) {
+
+            const prob = Math.floor(Math.random() * 7);
+
+            switch (prob) {
+                case 0:
+                    individual.set[ran].values[ran] = (Math.floor(Math.random() * 100) + 1) * -1;
+                    break;
+                case 1:
+                    individual.set[ran].values[ran] = 0;
+                    break;
+                case 2:
+                    individual.set[ran].values[ran] = Math.floor(Math.random() * 100) + 1;
+                    break;
+                case 3:
+                    individual.set[ran].values[ran] = (Math.floor(Math.random() * 10) + 1) * -1;
+                    break;
+                case 4:
+                    individual.set[ran].values[ran] = Math.floor(Math.random() * 10) + 1;
+                    break;
+                case 5:
+                    individual.set[ran].values[ran] = (Math.floor(Math.random() * 5) + 1) * -1;
+                    break;
+                case 6:
+                    individual.set[ran].values[ran] = Math.floor(Math.random() * 5) + 1;
+                    break;
+            }
+        }
+        else {
+            const inner_size = literals.length;
+            const prob = Math.floor(Math.random() * inner_size);
+
+            individual.set[ran].values[ran] = literals[prob];
+        }
     }
 }
 
@@ -115,9 +206,11 @@ function crossover(individual1, individual2) {
     }
 }
 
-async function runGA(numGenerations, population, func_json) {
+async function runGA(numGenerations, population, func_json, lit) {
     const populations = [];
     let ss = 1;
+
+    literals = lit;
 
     for (let i = 0; i < population; i++) {
         const individual = new Individual();
@@ -137,9 +230,9 @@ async function runGA(numGenerations, population, func_json) {
 
             for (let i = 0; i < population; i++) {
 
-                //console.log(populations[i].set);
+                console.log(populations[i].set);
 
-                populations[i].coverage[0] = getCoverage(func_json.functionName, populations[i].set);
+                populations[i].coverage[0] = await getCoverage(func_json.functionName, populations[i].set);
 
                 console.log("Generation " + generation + " Coverage " + i + ": " + populations[i].coverage[0]);
 
@@ -205,6 +298,7 @@ async function runGA(numGenerations, population, func_json) {
         ss++;
         for (let i = 0; i < population; i++) {
             populations[i].set.push(new Value());
+            populations[i].set[ss - 1].values = [];
             for (let j = 0; j < func_json.parametersLength; j++) {
                 populations[i].set[ss - 1].values.push(0);
             }
@@ -225,15 +319,15 @@ async function runGA(numGenerations, population, func_json) {
         }
     }
 
-    // console.log("Best fitness: " + bestFitness);
-    // console.log("Best individual: ");
+    console.log("Best fitness: " + bestFitness);
+    console.log("Best individual: ");
 
-    // for (let i = 0; i < bestIndividual.set.length; i++) {
-    //     console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
-    //     console.log("Lines: " + bestIndividual.setLines[i].lines.join(" "));
-    // }
+    for (let i = 0; i < bestIndividual.set.length; i++) {
+        console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
+        //console.log("Lines: " + bestIndividual.setLines[i].lines.join(" "));
+    }
 
-    return bestIndividual.set;
+    return bestIndividual;
 }
 
 // const numGenerations = 100;
