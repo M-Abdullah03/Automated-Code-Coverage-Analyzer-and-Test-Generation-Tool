@@ -1,4 +1,4 @@
-const {getCoverage} = require('./statementCoverage');
+const {getCoverage} = require('./statementCoverage.js');
 
 class Line {
     constructor() {
@@ -137,7 +137,7 @@ async function runGA(numGenerations, population, func_json) {
 
             for (let i = 0; i < population; i++) {
 
-                //console.log(populations[i].set);
+                console.log(populations[i].set);
 
                 populations[i].coverage[0] = await getCoverage(func_json.functionName, populations[i].set);
 

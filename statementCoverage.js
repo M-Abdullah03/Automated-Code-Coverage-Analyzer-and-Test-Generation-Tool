@@ -76,9 +76,8 @@ const checkCoverage = () => {
    return summary.toJSON().statements.pct;
 };
 
-
-const getCoverage = async (functionName, paramsSet) => {
-    //store copy of file
+const getCoverage = (functionName, paramsSet) => {
+    // Store copy of file
     fs.copyFileSync(fileName, fileName + '.bak');
 
     // Build up all the function calls in memory
@@ -93,18 +92,16 @@ const getCoverage = async (functionName, paramsSet) => {
         return `${functionName}(${paramsString});\n`;
     }).join('');
 
-        const functionCall = `${functionName}(${paramsString});\n`;
+    // Write all the function calls to the file at once
+    fs.appendFileSync(fileName, functionCalls);
 
-        fs.appendFileSync(fileName, functionCall);
-    });
-
+    // Run the coverage check
     const coverage = checkCoverage();
 
-    //restore file
+    // Restore file
     fs.copyFileSync(fileName + '.bak', fileName);
 
     return coverage;
-
 };
 
 
@@ -115,7 +112,12 @@ const functionInfo = getFunctionInfo('main.js');
 // Usage
 // console.log(functionInfo);
 
-console.log(getCoverage(functionInfo[0].functionName, [[0, 1, 2], [1, 1, 2]]));
+// console.log(getCoverage(functionInfo[0].functionName, [
+//     { values: [ 1, 2, 2 ] },
+//     { values: [ 0, 2, 3 ] },
+//     { values: [ 1, 0, 2 ] },
+//     { values: [ -1, -1, -2 ] }
+// ]));
 
 module.exports.getFunctionInfo = getFunctionInfo;
 module.exports.getCoverage = getCoverage;
