@@ -139,6 +139,8 @@ async function runGA(numGenerations, population, func_json) {
 
                 populations[i].coverage[0] = await getCoverage(func_json.function_name, populations[i].set);
 
+                console.log("Generation " + generation + " Coverage " + i + ": " + populations[i].coverage[0]);
+
                 // for (let s = 0; s < populations[i].set.length; s++) {
                 //     populations[i].coverage[s] = Math.floor((Math.random() * 100) + 1);
 
@@ -213,7 +215,7 @@ async function runGA(numGenerations, population, func_json) {
 
     for (let i = 0; i < population; i++) {
         const fitness = fitnessFunction(populations[i]);
-        console.log("Fitness " + i + ": " + fitness);
+        //console.log("Fitness " + i + ": " + fitness);
 
         if (fitness > bestFitness) {
             bestFitness = fitness;
@@ -221,13 +223,13 @@ async function runGA(numGenerations, population, func_json) {
         }
     }
 
-    console.log("Best fitness: " + bestFitness);
-    console.log("Best individual: ");
+    // console.log("Best fitness: " + bestFitness);
+    // console.log("Best individual: ");
 
-    for (let i = 0; i < bestIndividual.set.length; i++) {
-        console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
-        console.log("Lines: " + bestIndividual.setLines[i].lines.join(" "));
-    }
+    // for (let i = 0; i < bestIndividual.set.length; i++) {
+    //     console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
+    //     console.log("Lines: " + bestIndividual.setLines[i].lines.join(" "));
+    // }
 
     return bestIndividual.set;
 }

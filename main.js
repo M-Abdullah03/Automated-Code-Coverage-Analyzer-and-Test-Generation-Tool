@@ -1,7 +1,7 @@
 // Your function to test
 function testConditions(a, b, c) {
 
-    if(a == 0 && b == 1 || c == 2) {
+    if(a == 1 && b == 2 || c == 2) {
         if(a == 1) {
             if(b == 2) {
                 return true;
@@ -17,4 +17,3 @@ function testConditions(a, b, c) {
         return false;
     }
 }
-
