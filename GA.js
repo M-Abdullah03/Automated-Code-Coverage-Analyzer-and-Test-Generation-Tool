@@ -53,24 +53,57 @@ function generateRandomValues(individual) {
         const size2 = individual.set[i].values.length;
 
         for (let j = 0; j < size2; j++) {
-            const prob = Math.floor(Math.random() * 5);
 
-            switch (prob) {
-                case 0:
-                    individual.set[i].values[j] = ((Math.random() * 1000000) + 101) * -1;
-                    break;
-                case 1:
-                    individual.set[i].values[j] = (Math.floor(Math.random() * 100) + 1) * -1;
-                    break;
-                case 2:
-                    individual.set[i].values[j] = 0;
-                    break;
-                case 3:
-                    individual.set[i].values[j] = Math.floor(Math.random() * 100) + 1;
-                    break;
-                case 4:
-                    individual.set[i].values[j] = ((Math.random() * 1000000) + 101);
-                    break;
+            const ran = Math.floor(Math.random() * 7);
+
+            if(ran === 0) {
+
+                const prob = Math.floor(Math.random() * 5);
+
+                switch (prob) {
+                    case 0:
+                        individual.set[i].values[j] = ((Math.random() * 1000000) + 101) * -1;
+                        break;
+                    case 1:
+                        individual.set[i].values[j] = (Math.floor(Math.random() * 100) + 1) * -1;
+                        break;
+                    case 2:
+                        individual.set[i].values[j] = 0;
+                        break;
+                    case 3:
+                        individual.set[i].values[j] = Math.floor(Math.random() * 100) + 1;
+                        break;
+                    case 4:
+                        individual.set[i].values[j] = ((Math.random() * 1000000) + 101);
+                        break;
+                }
+            }
+            else {
+                const prob = Math.floor(Math.random() * 7);
+
+                switch (prob) {
+                    case 0:
+                        individual.set[i].values[j] = (Math.floor(Math.random() * 100) + 1) * -1;
+                        break;
+                    case 1:
+                        individual.set[i].values[j] = 0;
+                        break;
+                    case 2:
+                        individual.set[i].values[j] = Math.floor(Math.random() * 100) + 1;
+                        break;
+                    case 3:
+                        individual.set[i].values[j] = (Math.floor(Math.random() * 10) + 1) * -1;
+                        break;
+                    case 4:
+                        individual.set[i].values[j] = Math.floor(Math.random() * 10) + 1;
+                        break;
+                    case 5:
+                        individual.set[i].values[j] = (Math.floor(Math.random() * 5) + 1) * -1;
+                        break;
+                    case 6:
+                        individual.set[i].values[j] = Math.floor(Math.random() * 5) + 1;
+                        break;
+                }
             }
         }
     }
@@ -79,24 +112,57 @@ function generateRandomValues(individual) {
 function mutate(individual) {
     const size = individual.set.length;
     const ran = Math.floor(Math.random() * size);
-    const prob = Math.floor(Math.random() * 5);
 
-    switch (prob) {
-        case 0:
-            individual.set[ran].values[ran] = ((Math.random() * 1000000) + 101) * -1;
-            break;
-        case 1:
-            individual.set[ran].values[ran] = (Math.floor(Math.random() * 100) + 1) * -1;
-            break;
-        case 2:
-            individual.set[ran].values[ran] = 0;
-            break;
-        case 3:
-            individual.set[ran].values[ran] = Math.floor(Math.random() * 100) + 1;
-            break;
-        case 4:
-            individual.set[ran].values[ran] = ((Math.random() * 1000000) + 101);
-            break;
+    const rand = Math.floor(Math.random() * 7);
+
+    if(rand === 0) {
+
+        const prob = Math.floor(Math.random() * 5);
+
+        switch (prob) {
+            case 0:
+                individual.set[ran].values[ran] = ((Math.random() * 1000000) + 101) * -1;
+                break;
+            case 1:
+                individual.set[ran].values[ran] = (Math.floor(Math.random() * 100) + 1) * -1;
+                break;
+            case 2:
+                individual.set[ran].values[ran] = 0;
+                break;
+            case 3:
+                individual.set[ran].values[ran] = Math.floor(Math.random() * 100) + 1;
+                break;
+            case 4:
+                individual.set[ran].values[ran] = ((Math.random() * 1000000) + 101);
+                break;
+        }
+    }
+    else {
+        const prob = Math.floor(Math.random() * 7);
+
+        switch (prob) {
+            case 0:
+                individual.set[ran].values[ran] = (Math.floor(Math.random() * 100) + 1) * -1;
+                break;
+            case 1:
+                individual.set[ran].values[ran] = 0;
+                break;
+            case 2:
+                individual.set[ran].values[ran] = Math.floor(Math.random() * 100) + 1;
+                break;
+            case 3:
+                individual.set[ran].values[ran] = (Math.floor(Math.random() * 10) + 1) * -1;
+                break;
+            case 4:
+                individual.set[ran].values[ran] = Math.floor(Math.random() * 10) + 1;
+                break;
+            case 5:
+                individual.set[ran].values[ran] = (Math.floor(Math.random() * 5) + 1) * -1;
+                break;
+            case 6:
+                individual.set[ran].values[ran] = Math.floor(Math.random() * 5) + 1;
+                break;
+        }
     }
 }
 
@@ -225,13 +291,13 @@ async function runGA(numGenerations, population, func_json) {
         }
     }
 
-    // console.log("Best fitness: " + bestFitness);
-    // console.log("Best individual: ");
+    console.log("Best fitness: " + bestFitness);
+    console.log("Best individual: ");
 
-    // for (let i = 0; i < bestIndividual.set.length; i++) {
-    //     console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
-    //     console.log("Lines: " + bestIndividual.setLines[i].lines.join(" "));
-    // }
+    for (let i = 0; i < bestIndividual.set.length; i++) {
+        console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
+        //console.log("Lines: " + bestIndividual.setLines[i].lines.join(" "));
+    }
 
     return bestIndividual;
 }

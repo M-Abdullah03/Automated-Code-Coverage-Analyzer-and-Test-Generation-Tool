@@ -21,4 +21,5 @@ func.forEach(async (f) => {
     for (let i = 0; i < bestIndividual.set.length; i++) {
         console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
     }
+    console.log("Set" + bestIndividual.set);
 });

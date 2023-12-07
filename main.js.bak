@@ -1,5 +1,5 @@
 function validateNumbers(a) {
-    if(a > 0) {
+    if(a == 3) {
         return true;
     }
     return false;
