@@ -14,16 +14,4 @@ function validateNumbers(a, b, c) {
     else {
         return false;
     }
-}validateNumbers(-428873.28753051313,-570448.5396345883,24);
-validateNumbers(76,800139.2007762623,599021.0683610186);
-validateNumbers(-471191.42633355845,0,11);
-validateNumbers(0,1,2);
-validateNumbers(1,1,2);
-validateNumbers(0,1,2);
-validateNumbers(1,1,2);
-validateNumbers(0,1,2);
-validateNumbers(1,1,2);
-validateNumbers(0,1,2);
-validateNumbers(1,1,2);
-validateNumbers(0,1,2);
-validateNumbers(1,1,2);
+}
