@@ -1,3 +1,5 @@
+const getCoverage = require('./statementCoverage');
+
 class Line {
     constructor() {
         this.lines = [];
@@ -228,13 +230,15 @@ function runGA(numGenerations, population, func_json) {
     }
 }
 
-const numGenerations = 100;
-const populationSize = 100;
+// const numGenerations = 100;
+// const populationSize = 100;
 
-const func ={
-    function_name: "testConditions",
-    parameters: 3
-}
+// const func ={
+//     function_name: "testConditions",
+//     parameters: 3
+// }
 
 
-runGA(numGenerations, populationSize, func);
+// runGA(numGenerations, populationSize, func);
+
+module.exports = runGA;
