@@ -21,6 +21,8 @@ class Individual {
     }
 }
 
+let literals = [];
+
 function compareLines(line1, line2) {
     const range = Math.min(line1.lines.length, line2.lines.length);
 
@@ -79,30 +81,42 @@ function generateRandomValues(individual) {
                 }
             }
             else {
-                const prob = Math.floor(Math.random() * 7);
 
-                switch (prob) {
-                    case 0:
-                        individual.set[i].values[j] = (Math.floor(Math.random() * 100) + 1) * -1;
-                        break;
-                    case 1:
-                        individual.set[i].values[j] = 0;
-                        break;
-                    case 2:
-                        individual.set[i].values[j] = Math.floor(Math.random() * 100) + 1;
-                        break;
-                    case 3:
-                        individual.set[i].values[j] = (Math.floor(Math.random() * 10) + 1) * -1;
-                        break;
-                    case 4:
-                        individual.set[i].values[j] = Math.floor(Math.random() * 10) + 1;
-                        break;
-                    case 5:
-                        individual.set[i].values[j] = (Math.floor(Math.random() * 5) + 1) * -1;
-                        break;
-                    case 6:
-                        individual.set[i].values[j] = Math.floor(Math.random() * 5) + 1;
-                        break;
+                const p = Math.floor(Math.random() * 3);
+
+                if(p === 0) {
+
+                    const prob = Math.floor(Math.random() * 8);
+
+                    switch (prob) {
+                        case 0:
+                            individual.set[i].values[j] = (Math.floor(Math.random() * 100) + 1) * -1;
+                            break;
+                        case 1:
+                            individual.set[i].values[j] = 0;
+                            break;
+                        case 2:
+                            individual.set[i].values[j] = Math.floor(Math.random() * 100) + 1;
+                            break;
+                        case 3:
+                            individual.set[i].values[j] = (Math.floor(Math.random() * 10) + 1) * -1;
+                            break;
+                        case 4:
+                            individual.set[i].values[j] = Math.floor(Math.random() * 10) + 1;
+                            break;
+                        case 5:
+                            individual.set[i].values[j] = (Math.floor(Math.random() * 5) + 1) * -1;
+                            break;
+                        case 6:
+                            individual.set[i].values[j] = Math.floor(Math.random() * 5) + 1;
+                            break;
+                    }
+                }
+                else {
+                    const inner_size = literals.length;
+                    const prob = Math.floor(Math.random() * inner_size);
+
+                    individual.set[i].values[j] = literals[prob];
                 }
             }
         }
@@ -138,30 +152,42 @@ function mutate(individual) {
         }
     }
     else {
-        const prob = Math.floor(Math.random() * 7);
 
-        switch (prob) {
-            case 0:
-                individual.set[ran].values[ran] = (Math.floor(Math.random() * 100) + 1) * -1;
-                break;
-            case 1:
-                individual.set[ran].values[ran] = 0;
-                break;
-            case 2:
-                individual.set[ran].values[ran] = Math.floor(Math.random() * 100) + 1;
-                break;
-            case 3:
-                individual.set[ran].values[ran] = (Math.floor(Math.random() * 10) + 1) * -1;
-                break;
-            case 4:
-                individual.set[ran].values[ran] = Math.floor(Math.random() * 10) + 1;
-                break;
-            case 5:
-                individual.set[ran].values[ran] = (Math.floor(Math.random() * 5) + 1) * -1;
-                break;
-            case 6:
-                individual.set[ran].values[ran] = Math.floor(Math.random() * 5) + 1;
-                break;
+        const p = Math.floor(Math.random() * 3);
+
+        if(p === 0) {
+
+            const prob = Math.floor(Math.random() * 7);
+
+            switch (prob) {
+                case 0:
+                    individual.set[ran].values[ran] = (Math.floor(Math.random() * 100) + 1) * -1;
+                    break;
+                case 1:
+                    individual.set[ran].values[ran] = 0;
+                    break;
+                case 2:
+                    individual.set[ran].values[ran] = Math.floor(Math.random() * 100) + 1;
+                    break;
+                case 3:
+                    individual.set[ran].values[ran] = (Math.floor(Math.random() * 10) + 1) * -1;
+                    break;
+                case 4:
+                    individual.set[ran].values[ran] = Math.floor(Math.random() * 10) + 1;
+                    break;
+                case 5:
+                    individual.set[ran].values[ran] = (Math.floor(Math.random() * 5) + 1) * -1;
+                    break;
+                case 6:
+                    individual.set[ran].values[ran] = Math.floor(Math.random() * 5) + 1;
+                    break;
+            }
+        }
+        else {
+            const inner_size = literals.length;
+            const prob = Math.floor(Math.random() * inner_size);
+
+            individual.set[ran].values[ran] = literals[prob];
         }
     }
 }
@@ -181,9 +207,11 @@ function crossover(individual1, individual2) {
     }
 }
 
-async function runGA(numGenerations, population, func_json) {
+async function runGA(numGenerations, population, func_json, lit) {
     const populations = [];
     let ss = 1;
+
+    literals = lit;
 
     for (let i = 0; i < population; i++) {
         const individual = new Individual();
@@ -271,6 +299,7 @@ async function runGA(numGenerations, population, func_json) {
         ss++;
         for (let i = 0; i < population; i++) {
             populations[i].set.push(new Value());
+            populations[i].set[ss - 1].values = [];
             for (let j = 0; j < func_json.parametersLength; j++) {
                 populations[i].set[ss - 1].values.push(0);
             }

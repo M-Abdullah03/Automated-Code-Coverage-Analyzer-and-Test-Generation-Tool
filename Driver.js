@@ -7,10 +7,10 @@ const populationSize = 50;
 
 const func = getFunctionInfo('main.js');
 
-console.log(func);
+const literals = func.literals;
 
-func.forEach(async (f) => {
-    let bestIndividual = await runGA(numGenerations, populationSize, f);
+func.functionInfo.forEach(async (f) => {
+    let bestIndividual = await runGA(numGenerations, populationSize, f, literals);
 
     if(bestIndividual.coverage[0] === 100) {
         console.log("Function " + f.functionName + " is fully covered");
