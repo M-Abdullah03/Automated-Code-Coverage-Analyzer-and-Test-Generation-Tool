@@ -9,17 +9,16 @@ const FileUploadPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
-    function fetchAllData() {
+    const fetchAllData = () => {
         const formData = new FormData();
         formData.append('file', selectedFile);
 
         setIsLoading(true);
-
-        fetch('http://127.0.0.1:3000/coverage'), {
+        console.log("File sending")
+        fetch('http://127.0.0.1:3000/coverage', {
             method: 'POST',
             body: formData,
-        }
-            .then((response) => response.json())
+        }).then((response) => response.json())
             .then((data) => {
                 console.log(data);
                 localStorage.setItem('coverages', JSON.stringify(data));

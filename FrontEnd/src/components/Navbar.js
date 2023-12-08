@@ -8,14 +8,14 @@ const Navbar = () => {
     let title = 'Code Coverage Tool';
 
     return (
-        <AppBar position="static">
-            <Toolbar>
-                <Typography variant="h6" component={Link} to="/">
+        <AppBar position="static" className="navbar" sx={{ height: '10vh' }}>
+            <Toolbar className="navbar-toolbar">
+                <Typography variant="h6" component={Link} to="/" className="navbar-title">
                     {title}
                 </Typography>
                 {location.pathname.includes('coverage-selection') && (
-                    <Typography variant="h6">
-                        <Link to="/coverage">> Coverage</Link>
+                    <Typography variant="h6" className="navbar-link">
+                        <Link to="/coverage"> Coverage</Link>
                     </Typography>
                 )}
             </Toolbar>
