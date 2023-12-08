@@ -1,16 +1,12 @@
 const evaluate = require("./evaluate.js");
 const fs = require("fs");
 let conditions = [];
+const fs = require('fs');
 function validateNumbers(a) {
-    console.log("here");
-    if (evaluate(conditions, "a >0", {
+    if(evaluate(conditions, "a>6", {
         a: a
     }))
     {
-        return false;
+        return true;
     }
-    return true;
 }
-validateNumbers(3);
-validateNumbers(0);
-fs.writeFileSync("conditions.json", JSON.stringify(conditions))

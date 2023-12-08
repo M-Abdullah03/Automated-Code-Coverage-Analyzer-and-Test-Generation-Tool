@@ -9,7 +9,7 @@ const func = getFunctionInfo('main.js');
 
 const literals = func.literals;
 
-let type = "branch";
+let type = "condition";
 
 func.functionInfo.forEach(async (f) => {
     const bestIndividual = await runGA(numGenerations, populationSize, f, literals, type);
