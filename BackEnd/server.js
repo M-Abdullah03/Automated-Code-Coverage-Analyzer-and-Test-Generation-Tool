@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
+const { generateTestCases } = require('./Driver.js');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -21,10 +22,9 @@ app.listen(port, () => console.log(`Server running on port ${port}`));
 
 app.post('/coverage', upload.single('file'), (req, res) => {
     console.log(req.file);
-    console.log("File saved")
-    // req.file is the uploaded file
-    // The file is automatically saved to the root directory by multer
+    const result = generateTestCases('main.js');
+
 
     // Return the results
-    res.json({ message: 'Code executed successfully' });
+    res.json(result);
 });

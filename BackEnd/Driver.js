@@ -5,9 +5,8 @@ const {setConditions} = require('./conditionCoverage.js');
 const { formulateoutputjs } = require('./prisma.js');
 const fs = require('fs');
 
-const generateTestCases = () => {
+const generateTestCases = (fileName) => {
 
-    let fileName = "main.js";
     let testCases = [];
 
     const numGenerations = 100;
@@ -121,10 +120,14 @@ const generateTestCases = () => {
         });
     });
 
+    //delete all bak files
+    fs.unlinkSync(fileName + '.bak2');
+    fs.unlinkSync(fileName + '.bak');
+    
     return testCases;
 
 }
 
-console.log(generateTestCases());
+// console.log(generateTestCases());
 
 module.exports.generateTestCases = generateTestCases;

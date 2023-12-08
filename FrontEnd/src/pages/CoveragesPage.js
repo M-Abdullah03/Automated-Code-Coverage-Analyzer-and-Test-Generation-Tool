@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BarGraph from '../components/BarGraph.js';
 import CoverageTable from '../components/CoverageTable.js';
 import PercCoverages from '../components/PercCoverages.js';
@@ -19,7 +19,10 @@ const data = [
 
 const CoveragesPage = () => {
 
-    
+    useEffect(() => {
+        const coverages = JSON.parse(localStorage.getItem('coverages'));
+        console.log(coverages);
+    }, []);
     
     const exportPDF = () => {
         const element = document.querySelector('.coverage');
