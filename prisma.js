@@ -178,7 +178,7 @@ recast.visit(ast, {
 
 });
 
-// Add a line at the end of the file to write conditions to conditions.json
+
 // ast.program.body.push(
 //     b.expressionStatement(
 //         b.callExpression(
@@ -188,7 +188,7 @@ recast.visit(ast, {
 //                 false
 //             ),
 //             [
-//                 b.literal('conditions.json'),
+//                 b.literal('conditions2.json'),
 //                 b.callExpression(
 //                     b.memberExpression(
 //                         b.identifier('JSON'),
