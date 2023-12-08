@@ -58,8 +58,9 @@ const getFunctionInfo = (filename) => {
 // // Run the nyc command
 const checkCoverage = () => {
     global.__coverage__ = {};
+    
     // Create a new instrumenter
-    const instrumenter = new istanbul.Instrumenter;
+    const instrumenter = new istanbul.Instrumenter({includeAllBranches: true, includeAllSources: true,all:true});
 
     // Instrument the code
     const code = fs.readFileSync(path.resolve(fileName), 'utf-8');
@@ -73,10 +74,12 @@ const checkCoverage = () => {
     const collector = new istanbul.Collector();
     collector.add(global.__coverage__);
 
+
     const reporter = new istanbul.Reporter();
-    reporter.addAll(['json']);
+    reporter.addAll(['json','clover','cobertura','lcov']);
     reporter.write(collector, true, () => {
     });
+    
 
     // Read the coverage report
     let coverageReport = JSON.parse(fs.readFileSync('./coverage/coverage-final.json', 'utf8'));
@@ -126,16 +129,23 @@ const getCoverage = (functionName, paramsSet) => {
 
 const functionInfo = getFunctionInfo('main.js');
 //Example call
-// getCoverage('testConditions', [[1, 1, 2]]);
+//getCoverage('validateNumbers', [[1, 1, 2]]);
 
 // Usage
 // console.log(functionInfo);
 
 console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
-    { values: [1, 2, 2] },
+    { values: [1, 0, 0] },
     { values: [0, 2, 3] },
-    { values: [1, 0, 2] },
-    { values: [-1, -1, -2] }
+    { values: [1, 1, 0] },
+    { values: [60, 60, 60] },
+    {
+        values:[1,2,1]
+    },
+    {
+        values:[2,2,3]
+    },
+
 ]));
 
 module.exports.getFunctionInfo = getFunctionInfo;
