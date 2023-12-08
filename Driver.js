@@ -11,6 +11,7 @@ const func = getFunctionInfo('main.js');
 const literals = func.literals;
 
 let type = "condition";
+// formulateoutputjs("output.js","./evaluate.js");
 formulateoutputjs("output2.js","./evaluate2.js");
 
 
