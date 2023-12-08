@@ -9,9 +9,10 @@ const func = getFunctionInfo('main.js');
 
 const literals = func.literals;
 
+let type = "branch";
 
 func.functionInfo.forEach(async (f) => {
-    const bestIndividual = await runGA(numGenerations, populationSize, f, literals);
+    const bestIndividual = await runGA(numGenerations, populationSize, f, literals, type);
 
     if(bestIndividual.coverage[0] === 100) {
         console.log("Function " + f.functionName + " is fully covered");

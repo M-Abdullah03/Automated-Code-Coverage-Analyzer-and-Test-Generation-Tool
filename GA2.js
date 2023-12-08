@@ -1,4 +1,5 @@
 const {getCoverage} = require('./statementCoverage.js');
+const {getBranchCoverage} = require('./branchCoverage.js');
 
 class Line {
     constructor() {
@@ -211,7 +212,7 @@ function crossover(individual1, individual2) {
     }
 }
 
-async function runGA(numGenerations, population, func_json, lit) {
+async function runGA(numGenerations, population, func_json, lit, type) {
     const populations = [];
     let ss = func_json.returnCount;
 
@@ -241,7 +242,10 @@ async function runGA(numGenerations, population, func_json, lit) {
 
                 if (JSON.stringify(populations[i].set) !== JSON.stringify(populations[i].prev))
                 {
-                    populations[i].coverage[0] = await getCoverage(func_json.functionName, populations[i].set);
+                    if(type === "statement")
+                        populations[i].coverage[0] = await getCoverage(func_json.functionName, populations[i].set);
+                    else if(type === "branch")
+                        populations[i].coverage[0] = await getBranchCoverage(func_json.functionName, populations[i].set);
                 }
 
                 console.log("Generation " + generation + " Coverage " + i + ": " + populations[i].coverage[0]);

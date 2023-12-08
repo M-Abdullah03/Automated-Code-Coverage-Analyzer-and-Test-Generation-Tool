@@ -6,6 +6,7 @@ const path = require('path');
 const vm = require('vm');
 const istanbul = require('istanbul');
 
+
 let fileName;
 
 const getFunctionInfo = (filename) => {
@@ -56,27 +57,30 @@ const getFunctionInfo = (filename) => {
 }
 
 // // Run the nyc command
-const checkCoverage = () => {
+const checkCoverage = (testCasesLength) => {
     global.__coverage__ = {};
+    
     // Create a new instrumenter
-    const instrumenter = new istanbul.Instrumenter;
+    const instrumenter = new istanbul.Instrumenter({includeAllBranches: true, includeAllSources: true,all:true});
 
     // Instrument the code
     const code = fs.readFileSync(path.resolve(fileName), 'utf-8');
     const instrumentedCode = instrumenter.instrumentSync(code, fileName);
 
     // Execute the instrumented code
-    vm.runInThisContext(instrumentedCode);
+    vm.runInThisContext(instrumentedCode)
 
 
     // Generate the coverage report
     const collector = new istanbul.Collector();
     collector.add(global.__coverage__);
 
+
     const reporter = new istanbul.Reporter();
-    reporter.addAll(['json']);
+    reporter.addAll(['json','clover','cobertura','lcov']);
     reporter.write(collector, true, () => {
     });
+    
 
     // Read the coverage report
     let coverageReport = JSON.parse(fs.readFileSync('./coverage/coverage-final.json', 'utf8'));
@@ -90,9 +94,14 @@ const checkCoverage = () => {
         let fc = coverageMap.fileCoverageFor(f);
         summary.merge(fc.toSummary());
     });
-    //console.log(summary.toJSON());
-
-    return summary.toJSON().statements.pct;
+    console.log(summary.toJSON());
+    let totalStatements = summary.toJSON().statements.total;
+    let coveredStatements = summary.toJSON().statements.covered;
+    totalStatements = totalStatements - testCasesLength;
+    coveredStatements = coveredStatements - testCasesLength;
+    let statementCoverage = (coveredStatements / totalStatements)*100;
+    return statementCoverage;
+    //return summary.toJSON().statements.pct;
 };
 
 const getCoverage = (functionName, paramsSet) => {
@@ -100,20 +109,20 @@ const getCoverage = (functionName, paramsSet) => {
     fs.copyFileSync(fileName, fileName + '.bak');
 
     //keep only function of interest
-    const code = fs.readFileSync(fileName, 'utf8');
-    const ast = esprima.parseScript(code, { range: true });
-    let functionNode;
-    estraverse.traverse(ast, {
-        enter: function (node) {
-            if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
-                if (node.id.name === functionName) {
-                    functionNode = node;
-                }
-            }
-        }
-    });
-    const functionCode = code.substring(functionNode.range[0], functionNode.range[1]);
-    fs.writeFileSync(fileName, functionCode);
+    // const code = fs.readFileSync(fileName, 'utf8');
+    // const ast = esprima.parseScript(code, { range: true });
+    // let functionNode;
+    // estraverse.traverse(ast, {
+    //     enter: function (node) {
+    //         if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
+    //             if (node.id.name === functionName) {
+    //                 functionNode = node;
+    //             }
+    //         }
+    //     }
+    // });
+    // const functionCode = code.substring(functionNode.range[0], functionNode.range[1]);
+    // fs.writeFileSync(fileName, functionCode);
 
     // Build up all the function calls in memory
     const functionCalls = paramsSet.map(params => {
@@ -131,7 +140,7 @@ const getCoverage = (functionName, paramsSet) => {
     fs.appendFileSync(fileName, functionCalls);
 
     // Run the coverage check
-    const coverage = checkCoverage();
+    const coverage = checkCoverage(paramsSet.length);
 
     // Restore file
     fs.copyFileSync(fileName + '.bak', fileName);
@@ -140,18 +149,25 @@ const getCoverage = (functionName, paramsSet) => {
 };
 
 
-const functionInfo = getFunctionInfo('main.js');
+// const functionInfo = getFunctionInfo('main.js');
 //Example call
-// getCoverage('testConditions', [[1, 1, 2]]);
+//getCoverage('validateNumbers', [[1, 1, 2]]);
 
 // Usage
-console.log(functionInfo);
+// console.log(functionInfo);
 
 // console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
-//     { values: [ 1, 2, 2 ] }
-//     // { values: [ 0, 2, 3 ] },
-//     // { values: [ 1, 0, 2 ] },
-//     // { values: [ -1, -1, -2 ] }
+//     { values: [1, 0, 0] },
+//     { values: [0, 2, 3] },
+//     { values: [1, 1, 0] },
+//     { values: [60, 60, 60] },
+//     {
+//         values:[1,2,1]
+//     },
+//     {
+//         values:[2,2,3]
+//     },
+
 // ]));
 
 module.exports.getFunctionInfo = getFunctionInfo;
