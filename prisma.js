@@ -96,7 +96,7 @@ const concatswitchcase = (path) => {
     
     path.node.consequent.unshift(b.expressionStatement(evaluateCall));
 }
-const formulateoutputjs = () => {
+const formulateoutputjs = (fileToCreate,toImport) => {
 // Add a line at the start of the file to initialize conditions
 ast.program.body.unshift(
     b.variableDeclaration("let", [
@@ -116,7 +116,7 @@ ast.program.body.unshift(
 ast.program.body.unshift(
     b.variableDeclaration("const", [
         b.variableDeclarator(b.identifier("evaluate"), b.callExpression(
-            b.identifier("require"), [b.literal("./evaluate.js")]
+            b.identifier("require"), [b.literal(toImport)]
         ))
     ])
 );
@@ -131,6 +131,32 @@ recast.visit(ast, {
         concatConditions(path);
         // Continue the traversal of child nodes
         this.traverse(path);
+        return false;
+    },
+    visitWhileStatement: function (path) {
+        // Get the condition from the while statement
+        concatConditions(path);
+        // Continue the traversal of child nodes
+        this.traverse(path);
+        // Increment the condition index if at root
+        return false;
+    },
+    visitForStatement: function (path) {
+        // Get the condition from the for statement
+
+        concatConditions(path);
+        // Continue the traversal of child nodes
+        this.traverse(path);
+
+        // Increment the condition index if at root
+        return false;
+    },
+    visitDoWhileStatement: function (path) {
+        // Get the condition from the do while statement
+        concatConditions(path);
+        // Continue the traversal of child nodes
+        this.traverse(path);
+        // Increment the condition index if at root
         return false;
     },
     visitSwitchStatement: function (path) {
@@ -178,7 +204,7 @@ recast.visit(ast, {
 const output = recast.print(ast).code;
 
 // Write the modified code to a new file
-fs.writeFileSync('./output.js', output);
+fs.writeFileSync(fileToCreate, output);
         }
 module.exports.formulateoutputjs=formulateoutputjs;
 

@@ -1,1 +1,1 @@
-[{"condition":"a == 1 && b == 2 || c == 2","state":"both"},{"condition":"a == 0 && b == 2 || c == 3","state":"both"},{"condition":"a == 1","state":"both"},{"condition":"b == 2","state":"both"}]
+[{"condition":"a>6 && b>6 && c>6 && a<0 && b<0 && c<0","state":false}]

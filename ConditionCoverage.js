@@ -1,20 +1,21 @@
 const recast = require('recast');
 const fs = require('fs');
 const b = recast.types.builders;
+
 const code = fs.readFileSync('./main.js', 'utf8');
 const esprima = require('esprima');
 const estraverse = require('estraverse');
 const {formulateoutputjs} = require('./prisma.js');
-
+const {getFunctionInfo} = require('./statementCoverage.js');
 // Parse the code into an AST
 const ast = recast.parse(code);
-let fileName='output.js';
+let fileName='output2.js';
 
-function countBranches(func) {
+function countConditions(func) {
     // Parse the function into an AST
     const ast = esprima.parseScript(func.toString());
 
-    let branchCount = 0;
+    let conditionCount = 0;
 
     // Traverse the AST
     estraverse.traverse(ast, {
@@ -25,10 +26,13 @@ function countBranches(func) {
                 case 'WhileStatement':
                 case 'ForStatement':
                 case 'DoWhileStatement':
-                    branchCount += 2;
+                    const condition = recast.print(node.test).code;
+                    // Divide the condition into subconditions
+                    const subconditions = condition.split(/&&|\|\|/);
+                    conditionCount += subconditions.length*2;
                     break;
                 case 'SwitchStatement':
-                    branchCount += node.cases.length;
+                    conditionCount += node.cases.length;
                     break;
                 default:
                     break;
@@ -36,13 +40,13 @@ function countBranches(func) {
         }
     });
 
-    return branchCount;
+    return conditionCount;
 }
-const branches=countBranches(code);
+const branches=countConditions(code);
 
 const ranbranches=() => {
     let branches = 0;
-    let conditions = JSON.parse(fs.readFileSync('conditions.json', 'utf8'));
+    let conditions = JSON.parse(fs.readFileSync('conditions2.json', 'utf8'));
     conditions.forEach(condition => {
        if(condition.state == 'both')
        {
@@ -57,6 +61,7 @@ const ranbranches=() => {
 }
 
 const getCoverage = (functionName, paramsSet) => {
+
 
     // Store copy of file
     fs.copyFileSync(fileName, fileName + '.bak');
@@ -75,16 +80,11 @@ const getCoverage = (functionName, paramsSet) => {
 
     // Write all the function calls to the file at once
     fs.appendFileSync(fileName, functionCalls);
-    fs.appendFileSync(fileName,`fs.writeFileSync("conditions.json", JSON.stringify(conditions))`);
-
-    delete require.cache[require.resolve('./output.js')];
-
-    require('./output.js');
+    fs.appendFileSync(fileName,`fs.writeFileSync("conditions2.json", JSON.stringify(conditions))`);
+    require('./output2.js');
 
     // Run the coverage check
     const branchCount = ranbranches();
-    console.log(branchCount);
-    console.log(branches);
     const coverage = (branchCount/branches)*100;
 
     // Restore file
@@ -92,12 +92,10 @@ const getCoverage = (functionName, paramsSet) => {
 
     return coverage;
 };
-formulateoutputjs("output.js","./evaluate.js");
+formulateoutputjs("output2.js","./evaluate2.js");
 const functionInfo = getFunctionInfo('main.js');
 console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
-    { values: [1, 0, 0] },
-    { values: [6, 6, 6] },
+    { values: [-1, -1, -1] },
+    { values: [7, 7, 7] },
 
-// ]));
-
-module.exports.getBranchCoverage = getCoverage;
+]));

@@ -1,4 +1,4 @@
-const evaluate = require("./evaluate.js");
+const evaluate = require("./evaluate2.js");
 const fs = require("fs");
 let conditions = [];
 let h = 10;

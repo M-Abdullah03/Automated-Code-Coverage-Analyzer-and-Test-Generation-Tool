@@ -1,14 +1,7 @@
-function testConditions(a, b, c) {
-    if (a == 1 && b == 2 || c == 2) {
-        if (a == 1) {
-            if (b == 2) {
-                return true;
-            }
-            return true;
-        }
-    } else if (a == 0 && b == 2 || c == 3) {
-        return true;
-    } else {
-        return false;
+let h = 10;
+function validateNumbers(a, b, c) {
+    while(a>6 && b>6 && c>6 && a<0 && b<0 && c<0)
+    {
+        a--;
     }
 }

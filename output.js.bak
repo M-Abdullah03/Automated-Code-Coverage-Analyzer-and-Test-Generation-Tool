@@ -1,32 +1,18 @@
 const evaluate = require("./evaluate.js");
 const fs = require("fs");
 let conditions = [];
-// Your function to test
-function testConditions(a, b, c) {
-    if(evaluate(conditions, "a == 1 && b == 2 || c == 2", {
+let h = 10;
+function validateNumbers(a, b, c) {
+    while(evaluate(conditions, "a>6 && b>6 && c>6 && a<0 && b<0 && c<0", {
+        a: a,
+        b: b,
+        c: c,
         a: a,
         b: b,
         c: c
-    })) {
-        if(evaluate(conditions, "a == 1", {
-            a: a
-        })) {
-            if(evaluate(conditions, "b == 2", {
-                b: b
-            })) {
-                return true;
-            }
-            return true;
-        }
-    }
-    else if (evaluate(conditions, "a == 0 && b == 2 || c == 3", {
-        a: a,
-        b: b,
-        c: c
-    })) {
-        return true;
-    }
-    else {
-        return false;
+    }))
+    {
+        a--;
     }
 }
+fs.writeFileSync("conditions2.json", JSON.stringify(conditions));
