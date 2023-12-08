@@ -1,3 +1,6 @@
+const evaluate = require("./evaluate2.js");
+const fs = require("fs");
+let conditions = [];
 const evaluate = require("./evaluate.js");
 const fs = require("fs");
 let conditions = [];
@@ -15,4 +18,4 @@ function validateNumbers(a) {
 }
 validateNumbers(-1);
 validateNumbers(7);
-fs.writeFileSync("conditions2.json", JSON.stringify(conditions))
+fs.writeFileSync("conditions2.json", JSON.stringify(conditions));
