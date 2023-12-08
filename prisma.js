@@ -4,7 +4,7 @@ const b = recast.types.builders;
 
 const code = fs.readFileSync('./main.js', 'utf8');
 // Parse the code into an AST
-const ast = recast.parse(code);
+let ast = recast.parse(code);
 
 const concatConditions = (path) => {
     const condition = recast.print(path.node.test).code;

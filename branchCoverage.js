@@ -7,7 +7,6 @@ const estraverse = require('estraverse');
 // Parse the code into an AST
 const ast = recast.parse(code);
 let fileName = 'output.js';
-const outCode = fs.readFileSync(fileName, 'utf8');
 
 function countBranches(func) {
     // Parse the function into an AST
