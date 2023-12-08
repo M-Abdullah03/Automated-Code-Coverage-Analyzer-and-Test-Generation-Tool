@@ -1,6 +1,7 @@
 // Your function to test
 const h = 100;
 function validateNumbers(a, b, c) {
+<<<<<<< HEAD
     if (h == 10) {
         while (a % 2 == 0 && b % 2 != 0 || c > 50) {
             if (a % 2 == 0) {
@@ -16,3 +17,18 @@ function validateNumbers(a, b, c) {
         return false;
     }
 }
+=======
+    while(a % 2 == 0 && b % 2 != 0 || c > 50) {
+=======
+function validateNumbers(a, b, c) {
+    let x=[1,2,3];
+    x.forEach(element => {
+        console.log(element);
+    });
+
+    
+}
+module.exports = validateNumbers;
+
+validateNumbers(1,1,2);
+>>>>>>> fdb4f6ba1ebad987b576e556875f7e621d3b0cf6
