@@ -6,7 +6,6 @@ const path = require('path');
 const vm = require('vm');
 const istanbul = require('istanbul');
 
-
 let fileName;
 
 const getFunctionInfo = (filename) => {
@@ -16,6 +15,7 @@ const getFunctionInfo = (filename) => {
 
     // Parse the code into an AST
     const ast = esprima.parseScript(code, { range: true });
+
 
     const functionInfo = [];
     const literals = [];
@@ -27,9 +27,19 @@ const getFunctionInfo = (filename) => {
                 const functionName = node.id ? node.id.name : 'anonymous function';
                 const parametersLength = node.params.length;
 
+                let returnCount = 0;
+                estraverse.traverse(node, {
+                    enter: function (innerNode) {
+                        if (innerNode.type === 'ReturnStatement') {
+                            returnCount++;
+                        }
+                    }
+                });
+
                 functionInfo.push({
                     functionName,
-                    parametersLength
+                    parametersLength,
+                    returnCount
                 });
             }
             else if (node.type === 'Literal') {
@@ -39,50 +49,50 @@ const getFunctionInfo = (filename) => {
         }
     });
     //filter out duplicates
-    let newLs=literals.filter((item, index) => literals.indexOf(item) === index);
+    let newLs = literals.filter((item, index) => literals.indexOf(item) === index);
     //filter out non-numbers
-    newLs=literals.filter(item => typeof item === 'number');
-    return {functionInfo, literals: newLs};
+    newLs = literals.filter(item => typeof item === 'number');
+    return { functionInfo, literals: newLs };
 }
 
-console.log(getFunctionInfo('main.js'));
 // // Run the nyc command
 const checkCoverage = () => {
     global.__coverage__ = {};
-   // Create a new instrumenter
-   const instrumenter = new istanbul.Instrumenter();
+    // Create a new instrumenter
+    const instrumenter = new istanbul.Instrumenter;
 
-   // Instrument the code
-   const code = fs.readFileSync(path.resolve(fileName), 'utf-8');
-   const instrumentedCode = instrumenter.instrumentSync(code, fileName);
+    // Instrument the code
+    const code = fs.readFileSync(path.resolve(fileName), 'utf-8');
+    const instrumentedCode = instrumenter.instrumentSync(code, fileName);
 
-   // Execute the instrumented code
-   vm.runInThisContext(instrumentedCode);
-   
+    // Execute the instrumented code
+    vm.runInThisContext(instrumentedCode);
 
-   // Generate the coverage report
-   const collector = new istanbul.Collector();
-   collector.add(global.__coverage__);
 
-   const reporter = new istanbul.Reporter();
-   reporter.addAll(['json']);
-   reporter.write(collector, true, () => {
-   });
+    // Generate the coverage report
+    const collector = new istanbul.Collector();
+    collector.add(global.__coverage__);
 
-   // Read the coverage report
-   let coverageReport = JSON.parse(fs.readFileSync('./coverage/coverage-final.json', 'utf8'));
+    const reporter = new istanbul.Reporter();
+    reporter.addAll(['json']);
+    reporter.write(collector, true, () => {
+    });
 
-   // Create a coverage map
-   let coverageMap = libCoverage.createCoverageMap(coverageReport);
+    // Read the coverage report
+    let coverageReport = JSON.parse(fs.readFileSync('./coverage/coverage-final.json', 'utf8'));
 
-   // Calculate coverage summary
-   let summary = libCoverage.createCoverageSummary();
-   coverageMap.files().forEach(function (f) {
-       let fc = coverageMap.fileCoverageFor(f);
-       summary.merge(fc.toSummary());
-   });
-   
-   return summary.toJSON().statements.pct;
+    // Create a coverage map
+    let coverageMap = libCoverage.createCoverageMap(coverageReport);
+
+    // Calculate coverage summary
+    let summary = libCoverage.createCoverageSummary();
+    coverageMap.files().forEach(function (f) {
+        let fc = coverageMap.fileCoverageFor(f);
+        summary.merge(fc.toSummary());
+    });
+    console.log(summary.toJSON());
+
+    return summary.toJSON().statements.pct;
 };
 
 const getCoverage = (functionName, paramsSet) => {
@@ -121,12 +131,12 @@ const functionInfo = getFunctionInfo('main.js');
 // Usage
 // console.log(functionInfo);
 
-// console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
-//     { values: [ 1, 2, 2 ] },
-//     { values: [ 0, 2, 3 ] },
-//     { values: [ 1, 0, 2 ] },
-//     { values: [ -1, -1, -2 ] }
-// ]));
+console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
+    { values: [1, 2, 2] },
+    { values: [0, 2, 3] },
+    { values: [1, 0, 2] },
+    { values: [-1, -1, -2] }
+]));
 
 module.exports.getFunctionInfo = getFunctionInfo;
 module.exports.getCoverage = getCoverage;

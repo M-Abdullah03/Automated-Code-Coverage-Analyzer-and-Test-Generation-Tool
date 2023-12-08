@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+// Your function to test
+function validateNumbers(a, b, c) {
+    while(a % 2 == 0 && b % 2 != 0 || c > 50) {
+=======
 function validateNumbers(a, b, c) {
     let x=[1,2,3];
     x.forEach(element => {

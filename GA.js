@@ -51,7 +51,6 @@ function fitnessFunction(individual) {
 
 function generateRandomValues(individual) {
     const size = individual.set.length;
-
     for (let i = 0; i < size; i++) {
         const size2 = individual.set[i].values.length;
 

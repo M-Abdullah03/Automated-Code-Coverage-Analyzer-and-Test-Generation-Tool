@@ -1,5 +1,6 @@
+// Your function to test
 function validateNumbers(a, b, c) {
-    if(a % 2 == 0 && b % 2 != 0 || c > 50) {
+    while(a % 2 == 0 && b % 2 != 0 || c > 50) {
         if(a % 2 == 0) {
             if(b % 2 != 0) {
                 return true;
@@ -7,11 +8,9 @@ function validateNumbers(a, b, c) {
             return true;
         }
     }
-    else if (a % 2 != 0 && b % 2 == 0 || c <= 50) {
+    if (a % 2 != 0 && b % 2 == 0 || c <= 50) {
         return true;
     }
-    else {
-        return false;
-    }
+    return false;
 }
 
