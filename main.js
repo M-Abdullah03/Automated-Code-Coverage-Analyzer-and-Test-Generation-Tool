@@ -1,7 +1,6 @@
-let h = 10;
-function validateNumbers(a, b, c) {
-    while(a>6 && b>6 && c>6 && a<0 && b<0 && c<0)
+function validateNumbers(a) {
+    if(a>6)
     {
-        a--;
+        return true;
     }
 }

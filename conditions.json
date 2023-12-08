@@ -1,1 +1,1 @@
-[{"condition":"a>6 && b>6 && c>6 && a<0 && b<0 && c<0","state":false}]
+[{"condition":"a>6","state":false}]

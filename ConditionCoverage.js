@@ -6,7 +6,6 @@ const code = fs.readFileSync('./main.js', 'utf8');
 const esprima = require('esprima');
 const estraverse = require('estraverse');
 const {formulateoutputjs} = require('./prisma.js');
-const {getFunctionInfo} = require('./statementCoverage.js');
 // Parse the code into an AST
 const ast = recast.parse(code);
 let fileName='output2.js';
@@ -81,6 +80,9 @@ const getCoverage = (functionName, paramsSet) => {
     // Write all the function calls to the file at once
     fs.appendFileSync(fileName, functionCalls);
     fs.appendFileSync(fileName,`fs.writeFileSync("conditions2.json", JSON.stringify(conditions))`);
+
+    delete require.cache[require.resolve('./output2.js')];
+
     require('./output2.js');
 
     // Run the coverage check
@@ -93,9 +95,11 @@ const getCoverage = (functionName, paramsSet) => {
     return coverage;
 };
 formulateoutputjs("output2.js","./evaluate2.js");
-const functionInfo = getFunctionInfo('main.js');
-console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
-    { values: [-1, -1, -1] },
-    { values: [7, 7, 7] },
+// const functionInfo = getFunctionInfo('main.js');
+// console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
+//     { values: [-1, -1, -1] },
+//     { values: [7, 7, 7] },
 
-]));
+// ]));
+
+module.exports.getConditionCoverage = getCoverage;

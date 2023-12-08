@@ -1,18 +1,18 @@
 const evaluate = require("./evaluate2.js");
 const fs = require("fs");
 let conditions = [];
-let h = 10;
-function validateNumbers(a, b, c) {
-    while(evaluate(conditions, "a>6 && b>6 && c>6 && a<0 && b<0 && c<0", {
+const evaluate = require("./evaluate.js");
+const fs = require("fs");
+let conditions = [];
+function validateNumbers(a) {
+    if(evaluate(conditions, "evaluate(conditions, \"a>6\", {\r\n    a: a\r\n})", {
+        evaluate: evaluate,
+        conditions: conditions,
         a: a,
-        b: b,
-        c: c,
         a: a,
-        b: b,
-        c: c
+        a: a
     }))
     {
-        a--;
+        return true;
     }
 }
-fs.writeFileSync("conditions2.json", JSON.stringify(conditions));

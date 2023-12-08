@@ -93,11 +93,10 @@ const getCoverage = (functionName, paramsSet) => {
     return coverage;
 };
 formulateoutputjs("output.js","./evaluate.js");
-const functionInfo = getFunctionInfo('main.js');
-console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
-    { values: [1, 0, 0] },
-    { values: [6, 6, 6] },
-
+// const functionInfo = getFunctionInfo('main.js');
+// console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
+//     { values: [1, 0, 0] },
+//     { values: [6, 6, 6] },
 // ]));
 
 module.exports.getBranchCoverage = getCoverage;

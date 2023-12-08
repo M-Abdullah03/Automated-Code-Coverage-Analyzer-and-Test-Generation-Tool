@@ -1,5 +1,6 @@
 const {getCoverage} = require('./statementCoverage.js');
 const {getBranchCoverage} = require('./branchCoverage.js');
+const {getConditionCoverage} = require('./ConditionCoverage.js');
 
 class Line {
     constructor() {
@@ -246,6 +247,8 @@ async function runGA(numGenerations, population, func_json, lit, type) {
                         populations[i].coverage[0] = await getCoverage(func_json.functionName, populations[i].set);
                     else if(type === "branch")
                         populations[i].coverage[0] = await getBranchCoverage(func_json.functionName, populations[i].set);
+                    else if(type === "condition")
+                        populations[i].coverage[0] = await getConditionCoverage(func_json.functionName, populations[i].set);
                 }
 
                 console.log("Generation " + generation + " Coverage " + i + ": " + populations[i].coverage[0]);
