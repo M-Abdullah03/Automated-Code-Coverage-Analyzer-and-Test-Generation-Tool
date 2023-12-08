@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
 const { generateTestCases } = require('./Driver.js');
+const path = require('path');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -27,4 +28,9 @@ app.post('/coverage', upload.single('file'), (req, res) => {
 
     // Return the results
     res.json(result);
+});
+
+app.get('/getLcov', (req, res) => {
+    const file = path.join(__dirname, './coverage/lcov-report/__root__/main.js.html');
+    res.sendFile(file);
 });

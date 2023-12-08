@@ -7,25 +7,26 @@ import { Button } from '@mui/material';
 import html2pdf from 'html2pdf.js';
 import '../styles/CoveragesPage.css'
 
-const data = [
-    { name: 'Statements', percentage: 100 },
-    { name: 'Branches', percentage: 90 },
-    { name: 'Decisions', percentage: 75 },
-    { name: 'Conditions', percentage: 85 },
-    { name: 'MCDC', percentage: 70 },
-    { name: 'Functions', percentage: 95 },
-    // add more data as needed
-];
-
 const CoveragesPage = () => {
-
+    const [data, setData] = useState([]);
     useEffect(() => {
         const coverages = JSON.parse(localStorage.getItem('coverages'));
-        console.log(coverages);
+        const tempData = coverages.map(coverage => ({
+            name: coverage.type.charAt(0).toUpperCase() + coverage.type.slice(1),
+            percentage: coverage.coverage
+        }));
+        tempData.push({
+            name: 'Functional',
+            percentage: 100
+        });
+        console.log(tempData);
+        setData(tempData);
     }, []);
-    
-    const exportPDF = () => {
+
+    const exportPDF =async () => {
         const element = document.querySelector('.coverage');
+        //remove button from pdf
+        element.querySelector('.exp-btn').setAttribute('style', 'display: none');
         const opt = {
             margin: 1,
             filename: 'CoverageReport.pdf',
@@ -33,7 +34,10 @@ const CoveragesPage = () => {
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'in', format: 'Tabloid', orientation: 'landscape' }
         };
-        html2pdf().from(element).set(opt).save();
+        await html2pdf().from(element).set(opt).save();
+        //add button back
+        element.querySelector('.exp-btn').setAttribute('style', 'display: block');
+        
     };
 
     return (
@@ -47,7 +51,6 @@ const CoveragesPage = () => {
                     <BarGraph data={data} />
                     <CoverageTable data={data} />
                 </div>
-                <PercCoverages />
                 <LineCoverage />
             </div>
         </>

@@ -6,8 +6,11 @@ const LineCoverage = () => {
     const [divContent, setDivContent] = useState('');
 
     useEffect(() => {
-        fetch('main.js.html')   // 
-            .then((response) => response.text())
+        fetch('http://127.0.0.1:3000/getLcov',
+            {
+                method: 'GET',
+
+            }).then((response) => response.text())
             .then((data) => {
                 const parser = new DOMParser();
                 const htmlDocument = parser.parseFromString(data, 'text/html');
@@ -22,8 +25,10 @@ const LineCoverage = () => {
 
     return (
         <Card style={{ boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .3)' }}>
-            <CardContent>
+            <CardContent style={{ display: 'block' }}>
+                <pre>
                 <div className="line-cov" dangerouslySetInnerHTML={{ __html: divContent }} />
+                </pre>
             </CardContent>
         </Card>
     );

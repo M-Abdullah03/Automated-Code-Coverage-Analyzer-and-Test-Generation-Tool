@@ -38,7 +38,9 @@
 
 .line-cov {
     width: 175vh;
-    height: 100vh;
+    height: fit-content;
+    gap: 10px;
+   
 }
 
 .perc-cov {

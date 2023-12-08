@@ -6,16 +6,21 @@ const PercCoverages = () => {
     const [divContent, setDivContent] = useState('');
 
     useEffect(() => {
-        fetch('main.js.html')   //
+        fetch('http://127.0.0.1:3000/getLcov',
+            {
+                method: 'GET',
+                
+            })
             .then((response) => response.text())
             .then((data) => {
+                console.log(data);
                 const parser = new DOMParser();
                 const htmlDocument = parser.parseFromString(data, 'text/html');
                 const div = htmlDocument.querySelector('div.clearfix');
                 if (div) {
                     setDivContent(div.outerHTML);
                 } else {
-                    console.error('Element with selector "table.coverage" not found');
+                    console.error('Element with selector "table.clearfix" not found');
                 }
             });
     }, []);
