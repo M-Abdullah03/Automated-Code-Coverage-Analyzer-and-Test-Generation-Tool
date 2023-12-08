@@ -1,16 +1,8 @@
 const evaluate = require("./evaluate2.js");
 const fs = require("fs");
 let conditions = [];
-const evaluate = require("./evaluate.js");
-const fs = require("fs");
-let conditions = [];
-const fs = require('fs');
 function validateNumbers(a) {
-    if(evaluate(conditions, "evaluate(conditions, \"a>6\", {\r\n    a: a\r\n})", {
-        evaluate: evaluate,
-        conditions: conditions,
-        a: a,
-        a: a,
+    if(evaluate(conditions, "a>6", {
         a: a
     }))
     {
@@ -18,4 +10,26 @@ function validateNumbers(a) {
     }
 }
 validateNumbers(6);
+fs.writeFileSync("conditions2.json", JSON.stringify(conditions))
+validateNumbers(2);
+fs.writeFileSync("conditions2.json", JSON.stringify(conditions))
+validateNumbers(-764283.7889503551);
+fs.writeFileSync("conditions2.json", JSON.stringify(conditions))
+validateNumbers(6);
+fs.writeFileSync("conditions2.json", JSON.stringify(conditions))
+validateNumbers(-62);
+fs.writeFileSync("conditions2.json", JSON.stringify(conditions))
+validateNumbers(0);
+fs.writeFileSync("conditions2.json", JSON.stringify(conditions))
+validateNumbers(6);
+fs.writeFileSync("conditions2.json", JSON.stringify(conditions))
+validateNumbers(6);
+fs.writeFileSync("conditions2.json", JSON.stringify(conditions))
+validateNumbers(-93);
+fs.writeFileSync("conditions2.json", JSON.stringify(conditions))
+validateNumbers(6);
+fs.writeFileSync("conditions2.json", JSON.stringify(conditions))
+validateNumbers(5);
+fs.writeFileSync("conditions2.json", JSON.stringify(conditions))
+validateNumbers(9);
 fs.writeFileSync("conditions2.json", JSON.stringify(conditions))

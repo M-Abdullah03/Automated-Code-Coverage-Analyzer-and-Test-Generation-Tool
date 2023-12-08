@@ -94,6 +94,7 @@ const concatswitchcase = (path) => {
     path.node.consequent.unshift(b.expressionStatement(evaluateCall));
 }
 const formulateoutputjs = (fileToCreate, toImport) => {
+    console.log("formulate called");
     // Add a line at the start of the file to initialize conditions
     ast.program.body.unshift(
         b.variableDeclaration("let", [
@@ -108,6 +109,7 @@ const formulateoutputjs = (fileToCreate, toImport) => {
             ))
         ])
     );
+    console.log("fs added");
 
     //add a line at the start of the file to import evaluate.js
     ast.program.body.unshift(
@@ -175,7 +177,7 @@ const formulateoutputjs = (fileToCreate, toImport) => {
 
     });
 
-    // Add a line at the end of the file to write conditions to conditions.json
+
     // ast.program.body.push(
     //     b.expressionStatement(
     //         b.callExpression(
@@ -185,7 +187,7 @@ const formulateoutputjs = (fileToCreate, toImport) => {
     //                 false
     //             ),
     //             [
-    //                 b.literal('conditions.json'),
+    //                 b.literal('conditions2.json'),
     //                 b.callExpression(
     //                     b.memberExpression(
     //                         b.identifier('JSON'),
@@ -203,6 +205,37 @@ const formulateoutputjs = (fileToCreate, toImport) => {
     // Write the modified code to a new file
     fs.writeFileSync(fileToCreate, output);
 }
+
+//});
+
+// Add a line at the end of the file to write conditions to conditions.json
+// ast.program.body.push(
+//     b.expressionStatement(
+//         b.callExpression(
+//             b.memberExpression(
+//                 b.identifier('fs'),
+//                 b.identifier('writeFileSync'),
+//                 false
+//             ),
+//             [
+//                 b.literal('conditions.json'),
+//                 b.callExpression(
+//                     b.memberExpression(
+//                         b.identifier('JSON'),
+//                         b.identifier('stringify'),
+//                         false
+//                     ),
+//                     [b.identifier('conditions')]
+//                 )
+//             ]
+//         )
+//     )
+// );
+//const output = recast.print(ast).code;
+
+// Write the modified code to a new file
+//fs.writeFileSync(fileToCreate, output);
+//}
 
 module.exports.formulateoutputjs = formulateoutputjs;
 

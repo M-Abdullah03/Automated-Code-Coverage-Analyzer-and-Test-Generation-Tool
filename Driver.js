@@ -1,5 +1,6 @@
 const {runGA} = require('./GA2.js');
 const {getFunctionInfo} = require('./statementCoverage.js');
+const {formulateoutputjs} = require('./prisma.js');
 
 const numGenerations = 100;
 const populationSize = 50;
@@ -10,6 +11,8 @@ const func = getFunctionInfo('main.js');
 const literals = func.literals;
 
 let type = "condition";
+formulateoutputjs("output2.js","./evaluate2.js");
+
 
 func.functionInfo.forEach(async (f) => {
     const bestIndividual = await runGA(numGenerations, populationSize, f, literals, type);
