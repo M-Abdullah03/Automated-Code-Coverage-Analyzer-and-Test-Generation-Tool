@@ -126,7 +126,15 @@ const generateTestCases = (fileName) => {
     //delete all bak files
     fs.unlinkSync(fileName + '.bak2');
     fs.unlinkSync(fileName + '.bak');
+    fs.unlinkSync('output.js');
+    fs.unlinkSync('output2.js');
+    fs.unlinkSync('./output.js.bak');
+    fs.unlinkSync('./output2.js.bak');
+    //delete conditions.json
+    fs.unlinkSync("./conditions.json");
+    fs.unlinkSync("./conditions2.json");
     
+
     return testCases;
 
 }
