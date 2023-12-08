@@ -135,7 +135,6 @@ const checkCoverage = (testCasesLength) => {
     coveredStatements = coveredStatements - testCasesLength;
     let statementCoverage = (coveredStatements / totalStatements) * 100;
     return statementCoverage;
-    //return summary.toJSON().statements.pct;
 };
 
 function getFunctionCalls(node) {
@@ -169,8 +168,6 @@ const getCoverage = (functionName, paramsSet) => {
     // Store copy of file
     fs.copyFileSync(fileName, fileName + '.bak');
 
-    // Keep only function of interest and all dependent functions
-
     // Build up all the function calls in memory
     const functionCalls = paramsSet.map(params => {
         let paramsString;
@@ -196,17 +193,17 @@ const getCoverage = (functionName, paramsSet) => {
 };
 
 
-const functionInfo = getFunctionInfo('main.js');
+// const functionInfo = getFunctionInfo('main.js');
 //Example call
 //getCoverage('validateNumbers', [[1, 1, 2]]);
 
 // Usage
 // console.log(functionInfo);
 
-console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
-    { values: [1, 0, 0] },
+// console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
+//     { values: [1, 0, 0] },
 
-]));
+// ]));
 
 module.exports.getFunctionInfo = getFunctionInfo;
 module.exports.getCoverage = getCoverage;

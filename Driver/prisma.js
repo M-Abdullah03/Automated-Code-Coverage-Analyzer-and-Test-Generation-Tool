@@ -46,6 +46,7 @@ const concatswitchcase = (path) => {
     path.node.consequent.unshift(b.expressionStatement(evaluateCall));
 }
 const formulateoutputjs = (fileToCreate, toImport) => {
+    ast = recast.parse(code);
     // Add a line at the start of the file to initialize conditions
     ast.program.body.unshift(
         b.variableDeclaration("let", [
