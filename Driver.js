@@ -1,114 +1,130 @@
 const { runGA } = require('./GA2.js');
 const { getFunctionInfo, replaceFunction } = require('./statementCoverage.js');
+const {setBranches} = require('./branchCoverage.js');
+const {setConditions} = require('./conditionCoverage.js');
 const { formulateoutputjs } = require('./prisma.js');
 const fs = require('fs');
 
-const numGenerations = 100;
-const populationSize = 50;
+const generateTestCases = () => {
 
+    let fileName = "main.js";
+    let testCases = [];
 
-const func = getFunctionInfo('main.js');
+    const numGenerations = 100;
+    const populationSize = 50;
 
-const literals = func.literals;
-let fileName = "main.js";
-let type = "statement";
+    const func = getFunctionInfo(fileName);
 
-let testCases = [];
+    const literals = func.literals;
 
-func.functionInfo.map((f) => {
-    //create copy of file
-    fs.copyFileSync(fileName, fileName + '.bak2');
-    replaceFunction(f.functionName, fileName);
+    let type = "statement";
 
-    let bestIndividual = runGA(numGenerations, populationSize, f, literals, type);
+    func.functionInfo.map((f) => {
+        //create copy of file
+        fs.copyFileSync(fileName, fileName + '.bak2');
+        replaceFunction(f.functionName, fileName);
 
-    if (bestIndividual.coverage[0] === 100) {
-        console.log("Function " + f.functionName + " is fully covered");
+        let bestIndividual = runGA(numGenerations, populationSize, f, literals, type);
 
-    } else {
-        console.log("Function " + f.functionName + " is not fully covered");
-    }
+        // if (bestIndividual.coverage[0] === 100) {
+        //     console.log("Function " + f.functionName + " is fully covered");
 
-    console.log("Best individual: " + bestIndividual.coverage[0] + "%");
+        // } else {
+        //     console.log("Function " + f.functionName + " is not fully covered");
+        // }
 
-    for (let i = 0; i < bestIndividual.set.length; i++) {
-        console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
-    }
+        // console.log("Best individual: " + bestIndividual.coverage[0] + "%");
 
-    //restore file
-    fs.copyFileSync(fileName + '.bak2', fileName);
+        // for (let i = 0; i < bestIndividual.set.length; i++) {
+        //     console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
+        // }
 
-    testCases.push({
-        functionName: f.functionName,
-        type: type,
-        testCases: bestIndividual.set
+        //restore file
+        fs.copyFileSync(fileName + '.bak2', fileName);
+
+        testCases.push({
+            functionName: f.functionName,
+            type: type,
+            testCases: bestIndividual.set
+        });
     });
-});
 
-type = "branch";
-formulateoutputjs("output.js","./evaluate.js");
+    type = "branch";
 
-func.functionInfo.map((f) => {
-    //create copy of file
-    fs.copyFileSync(fileName, fileName + '.bak2');
-    replaceFunction(f.functionName, fileName);
+    func.functionInfo.map((f) => {
+        //create copy of file
+        fs.copyFileSync(fileName, fileName + '.bak2');
+        replaceFunction(f.functionName, fileName);
 
-    let bestIndividual = runGA(numGenerations, populationSize, f, literals, type);
+        setBranches();
 
-    if (bestIndividual.coverage[0] === 100) {
-        console.log("Function " + f.functionName + " is fully covered");
+        formulateoutputjs("output.js","./evaluate.js");
 
-    } else {
-        console.log("Function " + f.functionName + " is not fully covered");
-    }
+        let bestIndividual = runGA(numGenerations, populationSize, f, literals, type);
 
-    console.log("Best individual: " + bestIndividual.coverage[0] + "%");
+        // if (bestIndividual.coverage[0] === 100) {
+        //     console.log("Function " + f.functionName + " is fully covered");
 
-    for (let i = 0; i < bestIndividual.set.length; i++) {
-        console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
-    }
+        // } else {
+        //     console.log("Function " + f.functionName + " is not fully covered");
+        // }
 
-    //restore file
-    fs.copyFileSync(fileName + '.bak2', fileName);
+        // console.log("Best individual: " + bestIndividual.coverage[0] + "%");
 
-    testCases.push({
-        functionName: f.functionName,
-        type: type,
-        testCases: bestIndividual.set
+        // for (let i = 0; i < bestIndividual.set.length; i++) {
+        //     console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
+        // }
+
+        //restore file
+        fs.copyFileSync(fileName + '.bak2', fileName);
+
+        testCases.push({
+            functionName: f.functionName,
+            type: type,
+            testCases: bestIndividual.set
+        });
     });
-});
 
-type = "condition";
-formulateoutputjs("output2.js", "./evaluate2.js");
+    type = "condition";
 
-func.functionInfo.map((f) => {
-    //create copy of file
-    fs.copyFileSync(fileName, fileName + '.bak2');
-    replaceFunction(f.functionName, fileName);
+    func.functionInfo.map((f) => {
+        //create copy of file
+        fs.copyFileSync(fileName, fileName + '.bak2');
+        replaceFunction(f.functionName, fileName);
 
-    let bestIndividual = runGA(numGenerations, populationSize, f, literals, type);
+        setConditions();
 
-    if (bestIndividual.coverage[0] === 100) {
-        console.log("Function " + f.functionName + " is fully covered");
+        formulateoutputjs("output2.js", "./evaluate2.js");
 
-    } else {
-        console.log("Function " + f.functionName + " is not fully covered");
-    }
+        let bestIndividual = runGA(numGenerations, populationSize, f, literals, type);
 
-    console.log("Best individual: " + bestIndividual.coverage[0] + "%");
+        // if (bestIndividual.coverage[0] === 100) {
+        //     console.log("Function " + f.functionName + " is fully covered");
 
-    for (let i = 0; i < bestIndividual.set.length; i++) {
-        console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
-    }
+        // } else {
+        //     console.log("Function " + f.functionName + " is not fully covered");
+        // }
 
-    //restore file
-    fs.copyFileSync(fileName + '.bak2', fileName);
+        // console.log("Best individual: " + bestIndividual.coverage[0] + "%");
 
-    testCases.push({
-        functionName: f.functionName,
-        type: type,
-        testCases: bestIndividual.set
+        // for (let i = 0; i < bestIndividual.set.length; i++) {
+        //     console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
+        // }
+
+        //restore file
+        fs.copyFileSync(fileName + '.bak2', fileName);
+
+        testCases.push({
+            functionName: f.functionName,
+            type: type,
+            testCases: bestIndividual.set
+        });
     });
-});
 
-console.log(testCases);
+    return testCases;
+
+}
+
+console.log(generateTestCases());
+
+module.exports.generateTestCases = generateTestCases;

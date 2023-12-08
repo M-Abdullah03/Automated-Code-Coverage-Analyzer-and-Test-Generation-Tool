@@ -1,1 +1,0 @@
-    console.log("Starting GA for function " + f.functionName);

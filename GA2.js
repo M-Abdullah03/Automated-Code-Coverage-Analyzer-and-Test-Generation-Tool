@@ -1,6 +1,6 @@
 const {getCoverage} = require('./statementCoverage.js');
 const {getBranchCoverage} = require('./branchCoverage.js');
-const {getConditionCoverage} = require('./ConditionCoverage.js');
+const {getConditionCoverage} = require('./conditionCoverage.js');
 
 class Line {
     constructor() {
@@ -245,7 +245,7 @@ function runGA(numGenerations, population, func_json, lit, type) {
 
             for (let i = 0; i < population; i++) {
 
-                console.log(populations[i].set);
+                // console.log(populations[i].set);
 
                 if (JSON.stringify(populations[i].set) !== JSON.stringify(populations[i].prev))
                 {
@@ -257,7 +257,7 @@ function runGA(numGenerations, population, func_json, lit, type) {
                         populations[i].coverage[0] = getConditionCoverage(func_json.functionName, populations[i].set);
                 }
 
-                console.log("Generation " + generation + " Coverage " + i + ": " + populations[i].coverage[0]);
+                // console.log("Generation " + generation + " Coverage " + i + ": " + populations[i].coverage[0]);
 
                 if(populations[i].coverage[0] === 100) {
                     flag = true;
