@@ -2,6 +2,7 @@
 
 const evaluate = (conditions, condition, vars) => {
     with (vars) {
+        
         const state = eval(condition);
         //check if already exists
         const existingCondition = conditions.find(c => c.condition === condition);
@@ -18,5 +19,6 @@ const evaluate = (conditions, condition, vars) => {
         return state;
     }
 }
+
 
 module.exports = evaluate;

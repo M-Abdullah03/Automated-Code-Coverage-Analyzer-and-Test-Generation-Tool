@@ -140,19 +140,19 @@ const functionInfo = getFunctionInfo('main.js');
 // Usage
 // console.log(functionInfo);
 
-console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
-    { values: [1, 0, 0] },
-    { values: [0, 2, 3] },
-    { values: [1, 1, 0] },
-    { values: [60, 60, 60] },
-    {
-        values:[1,2,1]
-    },
-    {
-        values:[2,2,3]
-    },
+// console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
+//     { values: [1, 0, 0] },
+//     { values: [0, 2, 3] },
+//     { values: [1, 1, 0] },
+//     { values: [60, 60, 60] },
+//     {
+//         values:[1,2,1]
+//     },
+//     {
+//         values:[2,2,3]
+//     },
 
-]));
+// ]));
 
 module.exports.getFunctionInfo = getFunctionInfo;
 module.exports.getCoverage = getCoverage;

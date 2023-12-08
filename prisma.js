@@ -41,7 +41,21 @@ function countBranches(func) {
     return branchCount;
 }
 
-
+const ranbranches=() => {
+    let branches = 0;
+    let conditions = JSON.parse(fs.readFileSync('conditions.json', 'utf8'));
+    conditions.forEach(condition => {
+       if(condition.state == 'both')
+       {
+           branches+=2;
+       }
+         else
+         {
+              branches+=1;
+            }
+    });
+    return branches;
+}
 const concatConditions = (path) => {
     const condition = recast.print(path.node.test).code;
     const variables = condition.match(/[a-z]+/gi);
@@ -59,6 +73,30 @@ const concatConditions = (path) => {
     );
     path.node.test = evaluateCall;
 }
+const concatswitchcase = (path) => {
+    let condition = recast.print(path.node.test).code;
+    if(path.node.test == null)
+    {
+        condition = "'@'";
+    }
+    condition = condition.split(',').map(x => `${x}==${x}`).join(' && ');
+    const variables = condition.match(/[a-z]+/gi);
+    const objectProperties = variables ? variables.map(variable =>
+        b.property('init', b.identifier(variable), b.identifier(variable))
+    ) : [];
+
+    const evaluateCall = b.callExpression(
+        b.identifier('evaluate'),
+        [
+            b.identifier('conditions'),
+            b.literal(condition),
+            b.objectExpression(objectProperties)
+        ]
+    );
+    
+    path.node.consequent.unshift(b.expressionStatement(evaluateCall));
+}
+const formulateoutputjs = () => {
 // Add a line at the start of the file to initialize conditions
 ast.program.body.unshift(
     b.variableDeclaration("let", [
@@ -103,6 +141,14 @@ recast.visit(ast, {
         // Increment the condition index if at root
         return false;
     },
+    visitSwitchCase: function (path) {
+        // Get the condition from the switch case
+        concatswitchcase(path);
+        // Continue the traversal of child nodes
+        this.traverse(path);
+        // Increment the condition index if at root
+        return false;
+    }
 
 });
 
@@ -129,9 +175,11 @@ ast.program.body.push(
         )
     )
 );
-
-// Generate the modified code
 const output = recast.print(ast).code;
-console.log(countBranches(code));
+
 // Write the modified code to a new file
 fs.writeFileSync('./output.js', output);
+        }
+module.exports.formulateoutputjs=formulateoutputjs;
+
+// Generate the modified code
