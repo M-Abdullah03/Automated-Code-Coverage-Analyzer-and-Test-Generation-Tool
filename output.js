@@ -1,7 +1,6 @@
 const evaluate = require("./evaluate.js");
 const fs = require("fs");
 let conditions = [];
-// Your function to test
 const h = 10;
 function validateNumbers(a, b, c) {
     if (evaluate(conditions, "h == 10", {
@@ -16,6 +15,13 @@ function validateNumbers(a, b, c) {
         }
         return false;
     }
+    switch (evaluate(conditions, "h", {})) {
+    case evaluate(conditions, "1", {}):
+        //return true;
+    case 2:
+        //return false;
+    default:
+        return false;
+    }
 }
-validateNumbers(1, 2, 3);
 fs.writeFileSync("conditions.json", JSON.stringify(conditions));

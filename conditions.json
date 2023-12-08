@@ -1,10 +1,6 @@
 [
     {
-        "condition": "h == 10",
-        "state": true
-    },
-    {
-        "condition": "a % 2 != 0 && b % 2 == 0 || c <= 50",
-        "state": true
+        "condition": "h == 100",
+        "state": false
     }
 ]
