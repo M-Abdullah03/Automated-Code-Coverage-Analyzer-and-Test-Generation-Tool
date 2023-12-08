@@ -1,7 +1,17 @@
+const fs = require('fs');
 function validateNumbers(a) {
-    if (a >0)
-    {
+    console.log("here");
+    while (a > 0 || a < 0) {
         return false;
     }
-    return true;
+    if (a != 0) {
+        return false;
+    }
+    else {
+        while (a == 0) {
+            a--;
+        }
+        return true;
+    }
+
 }

@@ -3,8 +3,9 @@ const libCoverage = require('istanbul-lib-coverage');
 const esprima = require('esprima');
 const estraverse = require('estraverse');
 const path = require('path');
-const istanbul = require('istanbul');
 const vm = require('vm');
+const istanbul = require('istanbul');
+
 
 let fileName;
 
@@ -68,14 +69,12 @@ const checkCoverage = (testCasesLength) => {
 
     const context = {
         require: require,
-        module: module,
         console: console,
-        __coverage__: global.__coverage__,
         // Add any other global objects that your code needs
     };
     // Execute the instrumented code
-    vm.runInNewContext(instrumentedCode, context, fileName);
-    
+    vm.runInThisContext(instrumentedCode);
+
 
     // Generate the coverage report
     const collector = new istanbul.Collector();
@@ -164,6 +163,15 @@ const getCoverage = (functionName, paramsSet) => {
 
 console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
     { values: [1, 0, 0] },
+    { values: [0, 2, 3] },
+    { values: [1, 1, 0] },
+    { values: [60, 60, 60] },
+    {
+        values:[1,2,1]
+    },
+    {
+        values:[2,2,3]
+    },
 
 ]));
 
