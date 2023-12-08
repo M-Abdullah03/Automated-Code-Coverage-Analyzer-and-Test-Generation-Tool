@@ -79,7 +79,7 @@ const getCoverage = (functionName, paramsSet) => {
 
     // Write all the function calls to the file at once
     fs.appendFileSync(fileName, functionCalls);
-    fs.appendFileSync(fileName,`fs.writeFileSync("conditions2.json", JSON.stringify(conditions))`);
+    fs.appendFileSync(fileName,`fs.writeFileSync("conditions2.json", JSON.stringify(conditions));`);
 
     delete require.cache[require.resolve('./output2.js')];
 

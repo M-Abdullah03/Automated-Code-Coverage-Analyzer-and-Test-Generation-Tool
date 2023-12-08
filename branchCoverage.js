@@ -83,8 +83,6 @@ const getCoverage = (functionName, paramsSet) => {
 
     // Run the coverage check
     const branchCount = ranbranches();
-    console.log(branchCount);
-    console.log(branches);
     const coverage = (branchCount/branches)*100;
 
     // Restore file
