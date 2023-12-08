@@ -1,4 +1,5 @@
-node_modules/
+BackEnd/node_modules/
 .nyc_output/
 coverage/
 package-lock.json
+FrontEnd/node_modules/
