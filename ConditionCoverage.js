@@ -5,8 +5,7 @@ const b = recast.types.builders;
 const code = fs.readFileSync('./main.js', 'utf8');
 const esprima = require('esprima');
 const estraverse = require('estraverse');
-const {formulateoutputjs} = require('./prisma.js');
-const {getFunctionInfo} = require('./statementCoverage.js');
+const escodegen = require('escodegen');
 // Parse the code into an AST
 const ast = recast.parse(code);
 const fileName='output2.js';
@@ -60,11 +59,61 @@ const ranbranches=() => {
     return branches;
 }
 
-const getCoverage = (functionName, paramsSet) => {
+function getFunctionCalls(node) {
+    let functionCalls = [];
+    estraverse.traverse(node, {
+        enter: function (node) {
+            if (node.type === 'CallExpression' && node.callee.type === 'Identifier') {
+                functionCalls.push(node.callee.name);
+            }
+        }
+    });
+    return functionCalls;
+}
 
+function removeFunctions(code, functionsToKeep) {
+    let ast = esprima.parseScript(code);
+
+    ast = estraverse.replace(ast, {
+        enter: function (node) {
+            if ((node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') &&
+                node.id && !functionsToKeep.includes(node.id.name)) {
+                return this.remove();
+            }
+        }
+    });
+
+    return escodegen.generate(ast);
+}
+
+const getCoverage = (functionName, paramsSet) => {
 
     // Store copy of file
     fs.copyFileSync(fileName, fileName + '.bak');
+
+    //keep only function of interest and all dependent functions
+    let code = fs.readFileSync(fileName, 'utf8');
+
+    let ast = esprima.parseScript(code);
+
+    let functionsToKeep = [];
+    estraverse.traverse(ast, {
+        enter: function (node, parent) {
+            if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
+                let functionOfInterest = node.id ? node.id.name : parent.id ? parent.id.name : null;
+                if (functionName === functionOfInterest) {
+                    functionsToKeep.push(functionOfInterest);
+                    functionsToKeep.push(...getFunctionCalls(node));
+                }
+            }
+        }
+    });
+
+    // Remove all other functions
+    code = removeFunctions(code, functionsToKeep);
+
+    // Write the code to the file
+    fs.writeFileSync(fileName, code);
 
     // Build up all the function calls in memory
     const functionCalls = paramsSet.map(params => {
@@ -91,7 +140,7 @@ const getCoverage = (functionName, paramsSet) => {
     const coverage = (branchCount/branches)*100;
 
     // Restore file
-    //fs.copyFileSync(fileName + '.bak', fileName);
+    fs.copyFileSync(fileName + '.bak', fileName);
 
     return coverage;
 };

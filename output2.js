@@ -9,6 +9,7 @@ function validateNumbers(a) {
         return true;
     }
 }
-validateNumbers(-1);
-validateNumbers(7);
-fs.writeFileSync("conditions2.json", JSON.stringify(conditions))
+
+function validateNumbers2(a) {
+    validateNumbers(a);
+}

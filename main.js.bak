@@ -4,3 +4,7 @@ function validateNumbers(a) {
         return true;
     }
 }
+
+function validateNumbers2(a) {
+    validateNumbers(a);
+}

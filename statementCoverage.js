@@ -143,28 +143,28 @@ const getCoverage = (functionName, paramsSet) => {
     fs.copyFileSync(fileName, fileName + '.bak');
 
     //keep only function of interest and all dependent functions
-    // let code = fs.readFileSync(fileName, 'utf8');
+    let code = fs.readFileSync(fileName, 'utf8');
 
-    // let ast = esprima.parseScript(code);
+    let ast = esprima.parseScript(code);
 
-    // let functionsToKeep = [];
-    // estraverse.traverse(ast, {
-    //     enter: function (node, parent) {
-    //         if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
-    //             let functionOfInterest = node.id ? node.id.name : parent.id ? parent.id.name : null;
-    //             if (functionName === functionOfInterest) {
-    //                 functionsToKeep.push(functionOfInterest);
-    //                 functionsToKeep.push(...getFunctionCalls(node));
-    //             }
-    //         }
-    //     }
-    // });
+    let functionsToKeep = [];
+    estraverse.traverse(ast, {
+        enter: function (node, parent) {
+            if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
+                let functionOfInterest = node.id ? node.id.name : parent.id ? parent.id.name : null;
+                if (functionName === functionOfInterest) {
+                    functionsToKeep.push(functionOfInterest);
+                    functionsToKeep.push(...getFunctionCalls(node));
+                }
+            }
+        }
+    });
 
-    // // Remove all other functions
-    // code = removeFunctions(code, functionsToKeep);
+    // Remove all other functions
+    code = removeFunctions(code, functionsToKeep);
 
-    // // Write the code to the file
-    // fs.writeFileSync(fileName, code);
+    // Write the code to the file
+    fs.writeFileSync(fileName, code);
 
     // Build up all the function calls in memory
     const functionCalls = paramsSet.map(params => {
