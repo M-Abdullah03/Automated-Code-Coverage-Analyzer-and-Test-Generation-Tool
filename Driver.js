@@ -1,4 +1,4 @@
-const {runGA} = require('./GA.js');
+const {runGA} = require('./GA2.js');
 const {getFunctionInfo} = require('./statementCoverage.js');
 
 const numGenerations = 100;
@@ -9,8 +9,10 @@ const func = getFunctionInfo('main.js');
 
 const literals = func.literals;
 
+let type = "branch";
+
 func.functionInfo.forEach(async (f) => {
-    let bestIndividual = await runGA(numGenerations, populationSize, f, literals);
+    const bestIndividual = await runGA(numGenerations, populationSize, f, literals, type);
 
     if(bestIndividual.coverage[0] === 100) {
         console.log("Function " + f.functionName + " is fully covered");
@@ -18,8 +20,10 @@ func.functionInfo.forEach(async (f) => {
     } else {
         console.log("Function " + f.functionName + " is not fully covered");
     }
+
+    console.log("Best individual: " + bestIndividual.coverage[0] + "%");
+
     for (let i = 0; i < bestIndividual.set.length; i++) {
         console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
     }
-    console.log("Set" + bestIndividual.set);
 });

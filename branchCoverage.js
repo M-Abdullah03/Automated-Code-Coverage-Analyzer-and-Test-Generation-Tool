@@ -1,12 +1,11 @@
 const recast = require('recast');
 const fs = require('fs');
 const b = recast.types.builders;
-
 const code = fs.readFileSync('./main.js', 'utf8');
 const esprima = require('esprima');
 const estraverse = require('estraverse');
 const {formulateoutputjs} = require('./prisma.js');
-const {getFunctionInfo} = require('./statementCoverage.js');
+
 // Parse the code into an AST
 const ast = recast.parse(code);
 let fileName='output.js';
@@ -97,4 +96,6 @@ console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
     { values: [1, 0, 0] },
     { values: [6, 6, 6] },
 
-]));
+// ]));
+
+module.exports.getBranchCoverage = getCoverage;

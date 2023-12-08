@@ -179,28 +179,28 @@ recast.visit(ast, {
 });
 
 // Add a line at the end of the file to write conditions to conditions.json
-ast.program.body.push(
-    b.expressionStatement(
-        b.callExpression(
-            b.memberExpression(
-                b.identifier('fs'),
-                b.identifier('writeFileSync'),
-                false
-            ),
-            [
-                b.literal('conditions2.json'),
-                b.callExpression(
-                    b.memberExpression(
-                        b.identifier('JSON'),
-                        b.identifier('stringify'),
-                        false
-                    ),
-                    [b.identifier('conditions')]
-                )
-            ]
-        )
-    )
-);
+// ast.program.body.push(
+//     b.expressionStatement(
+//         b.callExpression(
+//             b.memberExpression(
+//                 b.identifier('fs'),
+//                 b.identifier('writeFileSync'),
+//                 false
+//             ),
+//             [
+//                 b.literal('conditions.json'),
+//                 b.callExpression(
+//                     b.memberExpression(
+//                         b.identifier('JSON'),
+//                         b.identifier('stringify'),
+//                         false
+//                     ),
+//                     [b.identifier('conditions')]
+//                 )
+//             ]
+//         )
+//     )
+// );
 const output = recast.print(ast).code;
 
 // Write the modified code to a new file

@@ -108,6 +108,22 @@ const getCoverage = (functionName, paramsSet) => {
     // Store copy of file
     fs.copyFileSync(fileName, fileName + '.bak');
 
+    //keep only function of interest
+    // const code = fs.readFileSync(fileName, 'utf8');
+    // const ast = esprima.parseScript(code, { range: true });
+    // let functionNode;
+    // estraverse.traverse(ast, {
+    //     enter: function (node) {
+    //         if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
+    //             if (node.id.name === functionName) {
+    //                 functionNode = node;
+    //             }
+    //         }
+    //     }
+    // });
+    // const functionCode = code.substring(functionNode.range[0], functionNode.range[1]);
+    // fs.writeFileSync(fileName, functionCode);
+
     // Build up all the function calls in memory
     const functionCalls = paramsSet.map(params => {
         let paramsString;
@@ -133,7 +149,7 @@ const getCoverage = (functionName, paramsSet) => {
 };
 
 
-const functionInfo = getFunctionInfo('main.js');
+// const functionInfo = getFunctionInfo('main.js');
 //Example call
 //getCoverage('validateNumbers', [[1, 1, 2]]);
 
