@@ -213,11 +213,17 @@ function crossover(individual1, individual2) {
     }
 }
 
-async function runGA(numGenerations, population, func_json, lit, type) {
+function runGA(numGenerations, population, func_json, lit, type) {
+    globalbestIndividual = null;
     const populations = [];
-    let ss = func_json.returnCount;
+    let ss = 1;
+
+    if(func_json.returnCount !== 0)
+        ss = func_json.returnCount;
 
     literals = lit;
+
+    //console.log("function name: " + func_json.functionName + " parameters: " + func_json.parametersLength);
 
     for (let i = 0; i < population; i++) {
         const individual = new Individual();
@@ -244,11 +250,11 @@ async function runGA(numGenerations, population, func_json, lit, type) {
                 if (JSON.stringify(populations[i].set) !== JSON.stringify(populations[i].prev))
                 {
                     if(type === "statement")
-                        populations[i].coverage[0] = await getCoverage(func_json.functionName, populations[i].set);
+                        populations[i].coverage[0] = getCoverage(func_json.functionName, populations[i].set);
                     else if(type === "branch")
-                        populations[i].coverage[0] = await getBranchCoverage(func_json.functionName, populations[i].set);
+                        populations[i].coverage[0] = getBranchCoverage(func_json.functionName, populations[i].set);
                     else if(type === "condition")
-                        populations[i].coverage[0] = await getConditionCoverage(func_json.functionName, populations[i].set);
+                        populations[i].coverage[0] = getConditionCoverage(func_json.functionName, populations[i].set);
                 }
 
                 console.log("Generation " + generation + " Coverage " + i + ": " + populations[i].coverage[0]);

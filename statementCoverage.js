@@ -9,6 +9,33 @@ const vm = require('vm');
 
 let fileName;
 
+const replaceFunction = (functionName, fileName) => {
+    //keep only function of interest and all dependent functions
+    let code = fs.readFileSync(fileName, 'utf8');
+
+    let ast = esprima.parseScript(code);
+
+    let functionsToKeep = [];
+    estraverse.traverse(ast, {
+        enter: function (node, parent) {
+            if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
+                let functionOfInterest = node.id ? node.id.name : parent.id ? parent.id.name : null;
+                if (functionName === functionOfInterest) {
+                    functionsToKeep.push(functionOfInterest);
+                    functionsToKeep.push(...getFunctionCalls(node));
+                }
+            }
+        }
+    });
+
+    // Remove all other functions
+    code = removeFunctions(code, functionsToKeep);
+
+    // Write the code to the file
+    fs.writeFileSync(fileName, code);
+}
+
+
 const getFunctionInfo = (filename) => {
     fileName = filename;
     // Read the file
@@ -59,9 +86,9 @@ const getFunctionInfo = (filename) => {
 // // Run the nyc command
 const checkCoverage = (testCasesLength) => {
     global.__coverage__ = {};
-    
+
     // Create a new instrumenter
-    const instrumenter = new istanbul.Instrumenter({includeAllBranches: true, includeAllSources: true,all:true});
+    const instrumenter = new istanbul.Instrumenter({ includeAllBranches: true, includeAllSources: true, all: true });
 
     // Instrument the code
     const code = fs.readFileSync(path.resolve(fileName), 'utf-8');
@@ -76,7 +103,7 @@ const checkCoverage = (testCasesLength) => {
     };
     // Execute the instrumented code
     vm.runInNewContext(instrumentedCode, context, fileName);
-    
+
 
     // Generate the coverage report
     const collector = new istanbul.Collector();
@@ -84,10 +111,10 @@ const checkCoverage = (testCasesLength) => {
 
 
     const reporter = new istanbul.Reporter();
-    reporter.addAll(['json','clover','cobertura','lcov']);
+    reporter.addAll(['json', 'clover', 'cobertura', 'lcov']);
     reporter.write(collector, true, () => {
     });
-    
+
 
     // Read the coverage report
     let coverageReport = JSON.parse(fs.readFileSync('./coverage/coverage-final.json', 'utf8'));
@@ -106,7 +133,7 @@ const checkCoverage = (testCasesLength) => {
     let coveredStatements = summary.toJSON().statements.covered;
     totalStatements = totalStatements - testCasesLength;
     coveredStatements = coveredStatements - testCasesLength;
-    let statementCoverage = (coveredStatements / totalStatements)*100;
+    let statementCoverage = (coveredStatements / totalStatements) * 100;
     return statementCoverage;
     //return summary.toJSON().statements.pct;
 };
@@ -142,29 +169,7 @@ const getCoverage = (functionName, paramsSet) => {
     // Store copy of file
     fs.copyFileSync(fileName, fileName + '.bak');
 
-    //keep only function of interest and all dependent functions
-    // let code = fs.readFileSync(fileName, 'utf8');
-
-    // let ast = esprima.parseScript(code);
-
-    // let functionsToKeep = [];
-    // estraverse.traverse(ast, {
-    //     enter: function (node, parent) {
-    //         if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
-    //             let functionOfInterest = node.id ? node.id.name : parent.id ? parent.id.name : null;
-    //             if (functionName === functionOfInterest) {
-    //                 functionsToKeep.push(functionOfInterest);
-    //                 functionsToKeep.push(...getFunctionCalls(node));
-    //             }
-    //         }
-    //     }
-    // });
-
-    // // Remove all other functions
-    // code = removeFunctions(code, functionsToKeep);
-
-    // // Write the code to the file
-    // fs.writeFileSync(fileName, code);
+    // Keep only function of interest and all dependent functions
 
     // Build up all the function calls in memory
     const functionCalls = paramsSet.map(params => {
@@ -191,7 +196,7 @@ const getCoverage = (functionName, paramsSet) => {
 };
 
 
- const functionInfo = getFunctionInfo('main.js');
+const functionInfo = getFunctionInfo('main.js');
 //Example call
 //getCoverage('validateNumbers', [[1, 1, 2]]);
 
@@ -205,3 +210,4 @@ console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
 
 module.exports.getFunctionInfo = getFunctionInfo;
 module.exports.getCoverage = getCoverage;
+module.exports.replaceFunction = replaceFunction;
