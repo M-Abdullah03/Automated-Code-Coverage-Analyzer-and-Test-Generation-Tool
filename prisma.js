@@ -6,7 +6,7 @@ const code = fs.readFileSync('./main.js', 'utf8');
 const esprima = require('esprima');
 const estraverse = require('estraverse');
 // Parse the code into an AST
-const ast = recast.parse(code);
+let ast = recast.parse(code);
 let index = 0;
 let conditionIndex = 0;
 let nestedConditionIndex = 0;
@@ -94,6 +94,7 @@ const concatswitchcase = (path) => {
     path.node.consequent.unshift(b.expressionStatement(evaluateCall));
 }
 const formulateoutputjs = (fileToCreate, toImport) => {
+    ast = recast.parse(code);
     // Add a line at the start of the file to initialize conditions
     ast.program.body.unshift(
         b.variableDeclaration("let", [
