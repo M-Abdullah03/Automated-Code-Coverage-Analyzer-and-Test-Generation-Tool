@@ -22,6 +22,7 @@ class Individual {
 }
 
 let literals = [];
+let globalbestIndividual=null;
 
 function compareLines(line1, line2) {
     const range = Math.min(line1.lines.length, line2.lines.length);
@@ -281,16 +282,29 @@ async function runGA(numGenerations, population, func_json, lit) {
         }
 
         let bestFitness = populations[0].coverage[0];
+        let bestIndividual = populations[0];    
 
         for (let i = 0; i < population; i++) {
             const fitness = fitnessFunction(populations[i]);
             //console.log("Fitness " + i + ": " + fitness);
 
+            
             if (fitness > bestFitness) {
+               
                 bestFitness = fitness;
+                bestIndividual = populations[i];
             }
         }
 
+        if(!globalbestIndividual)
+        {
+            globalbestIndividual=bestIndividual;
+            
+        }
+        else if(globalbestIndividual.coverage[0]<bestIndividual.coverage[0])
+        {
+            globalbestIndividual=bestIndividual;
+        }
         if (bestFitness === 100 || populations[0].set.length > 100) {
             break;
         }
@@ -309,29 +323,10 @@ async function runGA(numGenerations, population, func_json, lit) {
             //console.log('After pushing:', populations[i].set[ss - 1].values);
         }
     }
+   
 
-    let bestFitness = populations[0].coverage[0];
-    let bestIndividual = populations[0];
 
-    for (let i = 0; i < population; i++) {
-        const fitness = fitnessFunction(populations[i]);
-        //console.log("Fitness " + i + ": " + fitness);
-
-        if (fitness > bestFitness) {
-            bestFitness = fitness;
-            bestIndividual = populations[i];
-        }
-    }
-
-    console.log("Best fitness: " + bestFitness);
-    console.log("Best individual: ");
-
-    for (let i = 0; i < bestIndividual.set.length; i++) {
-        console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
-        //console.log("Lines: " + bestIndividual.setLines[i].lines.join(" "));
-    }
-
-    return bestIndividual;
+    return globalbestIndividual;
 }
 
 // const numGenerations = 100;
