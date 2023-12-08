@@ -1,4 +1,4 @@
-const {runGA} = require('./GA.js');
+const {runGA} = require('./GA2.js');
 const {getFunctionInfo} = require('./statementCoverage.js');
 
 const numGenerations = 100;
