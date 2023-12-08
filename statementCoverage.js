@@ -6,6 +6,7 @@ const path = require('path');
 const vm = require('vm');
 const istanbul = require('istanbul');
 
+
 let fileName;
 
 const getFunctionInfo = (filename) => {
@@ -56,7 +57,7 @@ const getFunctionInfo = (filename) => {
 }
 
 // // Run the nyc command
-const checkCoverage = () => {
+const checkCoverage = (testCasesLength) => {
     global.__coverage__ = {};
     // Create a new instrumenter
     const instrumenter = new istanbul.Instrumenter;
@@ -66,7 +67,7 @@ const checkCoverage = () => {
     const instrumentedCode = instrumenter.instrumentSync(code, fileName);
 
     // Execute the instrumented code
-    vm.runInThisContext(instrumentedCode);
+    vm.runInThisContext(instrumentedCode)
 
 
     // Generate the coverage report
@@ -91,8 +92,13 @@ const checkCoverage = () => {
         summary.merge(fc.toSummary());
     });
     console.log(summary.toJSON());
-
-    return summary.toJSON().statements.pct;
+    let totalStatements = summary.toJSON().statements.total;
+    let coveredStatements = summary.toJSON().statements.covered;
+    totalStatements = totalStatements - testCasesLength;
+    coveredStatements = coveredStatements - testCasesLength;
+    let statementCoverage = (coveredStatements / totalStatements)*100;
+    return statementCoverage;
+    //return summary.toJSON().statements.pct;
 };
 
 const getCoverage = (functionName, paramsSet) => {
@@ -115,7 +121,7 @@ const getCoverage = (functionName, paramsSet) => {
     fs.appendFileSync(fileName, functionCalls);
 
     // Run the coverage check
-    const coverage = checkCoverage();
+    const coverage = checkCoverage(paramsSet.length);
 
     // Restore file
     fs.copyFileSync(fileName + '.bak', fileName);

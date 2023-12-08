@@ -1,25 +1,18 @@
-<<<<<<< HEAD
 // Your function to test
+const h = 100;
 function validateNumbers(a, b, c) {
-    while(a % 2 == 0 && b % 2 != 0 || c > 50) {
-=======
-function validateNumbers(a, b, c) {
-    if(a % 2 == 0 && b % 2 != 0 || c > 50) {
->>>>>>> 74aff62cd230f93037c20bb9a2e6df3ad3cd7cfe
-        if(a % 2 == 0) {
-            if(b % 2 != 0) {
+    if (h == 10) {
+        while (a % 2 == 0 && b % 2 != 0 || c > 50) {
+            if (a % 2 == 0) {
+                if (b % 2 != 0) {
+                    return true;
+                }
                 return true;
             }
+        }
+        if (a % 2 != 0 && b % 2 == 0 || c <= 50) {
             return true;
         }
+        return false;
     }
-<<<<<<< HEAD
-    if (a % 2 != 0 && b % 2 == 0 || c <= 50) {
-=======
-    else if (a % 2 != 0 && b % 2 == 0 || c <= 50) {
->>>>>>> 74aff62cd230f93037c20bb9a2e6df3ad3cd7cfe
-        return true;
-    }
-    return false;
 }
-

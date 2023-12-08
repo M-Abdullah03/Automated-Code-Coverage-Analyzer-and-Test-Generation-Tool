@@ -1,18 +1,1 @@
-{
-    "condition0": {
-        "a == 0": true,
-        "b == 1": true,
-        "c == 2": true,
-        "condition0": {
-            "a == 1": false,
-            "condition0": {
-                "b == 2": false
-            }
-        }
-    },
-    "condition1": {
-        "a == 1": false,
-        "b == 2": false,
-        "c == 3": false
-    }
-}
+[{"condition":"h == 100","state":true},{"condition":"a % 2 != 0 && b % 2 == 0 || c <= 50","state":true}]
