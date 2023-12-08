@@ -41,18 +41,16 @@ function countBranches(func) {
     return branchCount;
 }
 
-const ranbranches=() => {
+const ranbranches = () => {
     let branches = 0;
     let conditions = JSON.parse(fs.readFileSync('conditions.json', 'utf8'));
     conditions.forEach(condition => {
-       if(condition.state == 'both')
-       {
-           branches+=2;
-       }
-         else
-         {
-              branches+=1;
-            }
+        if (condition.state == 'both') {
+            branches += 2;
+        }
+        else {
+            branches += 1;
+        }
     });
     return branches;
 }
@@ -75,8 +73,7 @@ const concatConditions = (path) => {
 }
 const concatswitchcase = (path) => {
     let condition = recast.print(path.node.test).code;
-    if(path.node.test == null)
-    {
+    if (path.node.test == null) {
         condition = "'@'";
     }
     condition = condition.split(',').map(x => `${x}==${x}`).join(' && ');
@@ -93,92 +90,125 @@ const concatswitchcase = (path) => {
             b.objectExpression(objectProperties)
         ]
     );
-    
+
     path.node.consequent.unshift(b.expressionStatement(evaluateCall));
 }
-const formulateoutputjs = (fileToCreate,toImport) => {
-// Add a line at the start of the file to initialize conditions
-ast.program.body.unshift(
-    b.variableDeclaration("let", [
-        b.variableDeclarator(b.identifier("conditions"), b.arrayExpression([]))
-    ])
-);
-// Add a line at the start of the file to import fs
-ast.program.body.unshift(
-    b.variableDeclaration("const", [
-        b.variableDeclarator(b.identifier("fs"), b.callExpression(
-            b.identifier("require"), [b.literal("fs")]
-        ))
-    ])
-);
+const formulateoutputjs = (fileToCreate, toImport) => {
+    console.log("formulate called");
+    // Add a line at the start of the file to initialize conditions
+    ast.program.body.unshift(
+        b.variableDeclaration("let", [
+            b.variableDeclarator(b.identifier("conditions"), b.arrayExpression([]))
+        ])
+    );
+    // Add a line at the start of the file to import fs
+    ast.program.body.unshift(
+        b.variableDeclaration("const", [
+            b.variableDeclarator(b.identifier("fs"), b.callExpression(
+                b.identifier("require"), [b.literal("fs")]
+            ))
+        ])
+    );
+    console.log("fs added");
 
-//add a line at the start of the file to import evaluate.js
-ast.program.body.unshift(
-    b.variableDeclaration("const", [
-        b.variableDeclarator(b.identifier("evaluate"), b.callExpression(
-            b.identifier("require"), [b.literal(toImport)]
-        ))
-    ])
-);
+    //add a line at the start of the file to import evaluate.js
+    ast.program.body.unshift(
+        b.variableDeclaration("const", [
+            b.variableDeclarator(b.identifier("evaluate"), b.callExpression(
+                b.identifier("require"), [b.literal(toImport)]
+            ))
+        ])
+    );
 
-// Traverse the AST
+    // Traverse the AST
 
-recast.visit(ast, {
-    visitIfStatement: function (path) {
-        // Get the condition from the if statement
-        //concatConditions(path);
-        // Create a call to the evaluate function
-        concatConditions(path);
-        // Continue the traversal of child nodes
-        this.traverse(path);
-        return false;
-    },
-    visitWhileStatement: function (path) {
-        // Get the condition from the while statement
-        concatConditions(path);
-        // Continue the traversal of child nodes
-        this.traverse(path);
-        // Increment the condition index if at root
-        return false;
-    },
-    visitForStatement: function (path) {
-        // Get the condition from the for statement
+    recast.visit(ast, {
+        visitIfStatement: function (path) {
+            // Get the condition from the if statement
+            //concatConditions(path);
+            // Create a call to the evaluate function
+            concatConditions(path);
+            // Continue the traversal of child nodes
+            this.traverse(path);
+            return false;
+        },
+        visitWhileStatement: function (path) {
+            // Get the condition from the while statement
+            concatConditions(path);
+            // Continue the traversal of child nodes
+            this.traverse(path);
+            // Increment the condition index if at root
+            return false;
+        },
+        visitForStatement: function (path) {
+            // Get the condition from the for statement
 
-        concatConditions(path);
-        // Continue the traversal of child nodes
-        this.traverse(path);
+            concatConditions(path);
+            // Continue the traversal of child nodes
+            this.traverse(path);
 
-        // Increment the condition index if at root
-        return false;
-    },
-    visitDoWhileStatement: function (path) {
-        // Get the condition from the do while statement
-        concatConditions(path);
-        // Continue the traversal of child nodes
-        this.traverse(path);
-        // Increment the condition index if at root
-        return false;
-    },
-    visitSwitchStatement: function (path) {
-        // Get the condition from the switch statement
-        concatConditions(path);
-        // Continue the traversal of child nodes
-        this.traverse(path);
-        // Increment the condition index if at root
-        return false;
-    },
-    visitSwitchCase: function (path) {
-        // Get the condition from the switch case
-        concatswitchcase(path);
-        // Continue the traversal of child nodes
-        this.traverse(path);
-        // Increment the condition index if at root
-        return false;
-    }
+            // Increment the condition index if at root
+            return false;
+        },
+        visitDoWhileStatement: function (path) {
+            // Get the condition from the do while statement
+            concatConditions(path);
+            // Continue the traversal of child nodes
+            this.traverse(path);
+            // Increment the condition index if at root
+            return false;
+        },
+        visitSwitchStatement: function (path) {
+            // Get the condition from the switch statement
+            concatConditions(path);
+            // Continue the traversal of child nodes
+            this.traverse(path);
+            // Increment the condition index if at root
+            return false;
+        },
+        visitSwitchCase: function (path) {
+            // Get the condition from the switch case
+            concatswitchcase(path);
+            // Continue the traversal of child nodes
+            this.traverse(path);
+            // Increment the condition index if at root
+            return false;
+        }
 
-});
+    });
 
 
+    // ast.program.body.push(
+    //     b.expressionStatement(
+    //         b.callExpression(
+    //             b.memberExpression(
+    //                 b.identifier('fs'),
+    //                 b.identifier('writeFileSync'),
+    //                 false
+    //             ),
+    //             [
+    //                 b.literal('conditions2.json'),
+    //                 b.callExpression(
+    //                     b.memberExpression(
+    //                         b.identifier('JSON'),
+    //                         b.identifier('stringify'),
+    //                         false
+    //                     ),
+    //                     [b.identifier('conditions')]
+    //                 )
+    //             ]
+    //         )
+    //     )
+    // );
+    const output = recast.print(ast).code;
+
+    // Write the modified code to a new file
+    fs.writeFileSync(fileToCreate, output);
+}
+
+//});
+
+// Add a line at the end of the file to write conditions to conditions.json
 // ast.program.body.push(
 //     b.expressionStatement(
 //         b.callExpression(
@@ -188,7 +218,7 @@ recast.visit(ast, {
 //                 false
 //             ),
 //             [
-//                 b.literal('conditions2.json'),
+//                 b.literal('conditions.json'),
 //                 b.callExpression(
 //                     b.memberExpression(
 //                         b.identifier('JSON'),
@@ -201,11 +231,12 @@ recast.visit(ast, {
 //         )
 //     )
 // );
-const output = recast.print(ast).code;
+//const output = recast.print(ast).code;
 
 // Write the modified code to a new file
-fs.writeFileSync(fileToCreate, output);
-        }
-module.exports.formulateoutputjs=formulateoutputjs;
+//fs.writeFileSync(fileToCreate, output);
+//}
+
+module.exports.formulateoutputjs = formulateoutputjs;
 
 // Generate the modified code

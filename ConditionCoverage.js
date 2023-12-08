@@ -9,7 +9,7 @@ const {formulateoutputjs} = require('./prisma.js');
 const {getFunctionInfo} = require('./statementCoverage.js');
 // Parse the code into an AST
 const ast = recast.parse(code);
-let fileName='output2.js';
+const fileName='output2.js';
 
 function countConditions(func) {
     // Parse the function into an AST
@@ -95,12 +95,6 @@ const getCoverage = (functionName, paramsSet) => {
 
     return coverage;
 };
-formulateoutputjs("output2.js","./evaluate2.js");
-const functionInfo = getFunctionInfo('main.js');
-console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
-    { values: [-1] },
-    { values: [7] },
 
-]));
 
 module.exports.getConditionCoverage = getCoverage;

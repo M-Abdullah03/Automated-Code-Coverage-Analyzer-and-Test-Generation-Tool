@@ -11,5 +11,4 @@ function validateNumbers(a) {
 }
 validateNumbers(-1);
 validateNumbers(7);
-fs.writeFileSync("conditions2.json", JSON.stringify(conditions));validateNumbers(6);
-fs.writeFileSync("conditions2.json", JSON.stringify(conditions));
+fs.writeFileSync("conditions2.json", JSON.stringify(conditions))
