@@ -90,7 +90,7 @@ const getCoverage = (functionName, paramsSet) => {
 
     return coverage;
 };
-formulateoutputjs("output.js","./evaluate.js");
+// formulateoutputjs("output.js","./evaluate.js");
 // const functionInfo = getFunctionInfo('main.js');
 // console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
 //     { values: [1, 0, 0] },
