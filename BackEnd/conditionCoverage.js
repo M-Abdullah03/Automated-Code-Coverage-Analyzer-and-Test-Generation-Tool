@@ -1,12 +1,8 @@
 const recast = require('recast');
 const fs = require('fs');
-
-const code = fs.readFileSync('./main.js', 'utf8');
 const esprima = require('esprima');
 const estraverse = require('estraverse');
-const escodegen = require('escodegen');
-// Parse the code into an AST
-const ast = recast.parse(code);
+
 const fileName='output2.js';
 
 function countConditions(func) {
@@ -40,7 +36,8 @@ function countConditions(func) {
 
     return conditionCount;
 }
-const branches=countConditions(code);
+
+let branches = null;
 
 const ranbranches=() => {
     let branches = 0;
@@ -57,6 +54,12 @@ const ranbranches=() => {
     });
     return branches;
 }
+
+const setBranches = () => {
+    const code = fs.readFileSync('./main.js', 'utf8');
+    branches = countConditions(code);
+}
+
 
 const getCoverage = (functionName, paramsSet) => {
 
@@ -95,3 +98,4 @@ const getCoverage = (functionName, paramsSet) => {
 
 
 module.exports.getConditionCoverage = getCoverage;
+module.exports.setConditions = setBranches;

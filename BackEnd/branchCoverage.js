@@ -1,11 +1,7 @@
-const recast = require('recast');
 const fs = require('fs');
-const code = fs.readFileSync('./main.js', 'utf8');
 const esprima = require('esprima');
 const estraverse = require('estraverse');
 
-// Parse the code into an AST
-const ast = recast.parse(code);
 let fileName = 'output.js';
 
 function countBranches(func) {
@@ -36,7 +32,8 @@ function countBranches(func) {
 
     return branchCount;
 }
-const branches = countBranches(code);
+
+let branches = null;
 
 const ranbranches = () => {
     let branches = 0;
@@ -50,6 +47,11 @@ const ranbranches = () => {
         }
     });
     return branches;
+}
+
+const setBranches = () => {
+    const code = fs.readFileSync('./main.js', 'utf8');
+    branches = countBranches(code);
 }
 
 const getCoverage = (functionName, paramsSet) => {
@@ -89,3 +91,4 @@ const getCoverage = (functionName, paramsSet) => {
 
 
 module.exports.getBranchCoverage = getCoverage;
+module.exports.setBranches = setBranches;

@@ -2,7 +2,7 @@ const recast = require('recast');
 const fs = require('fs');
 const b = recast.types.builders;
 
-const code = fs.readFileSync('./main.js', 'utf8');
+let code = fs.readFileSync('./main.js', 'utf8');
 // Parse the code into an AST
 let ast = recast.parse(code);
 
@@ -46,6 +46,7 @@ const concatswitchcase = (path) => {
     path.node.consequent.unshift(b.expressionStatement(evaluateCall));
 }
 const formulateoutputjs = (fileToCreate, toImport) => {
+    code = fs.readFileSync('./main.js', 'utf8');
     ast = recast.parse(code);
     // Add a line at the start of the file to initialize conditions
     ast.program.body.unshift(

@@ -1,7 +1,7 @@
 const evaluate = require("./evaluate2.js");
 const fs = require("fs");
 let conditions = [];
-function validateNumbers(a) {
+function validateNumbers2(a) {
     if (evaluate(conditions, "a > 6", {
         a: a
     })) {
