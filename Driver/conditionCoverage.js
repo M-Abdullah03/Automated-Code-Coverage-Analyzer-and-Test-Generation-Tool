@@ -1,6 +1,5 @@
 const recast = require('recast');
 const fs = require('fs');
-const b = recast.types.builders;
 
 const code = fs.readFileSync('./main.js', 'utf8');
 const esprima = require('esprima');

@@ -1,10 +1,8 @@
 const recast = require('recast');
 const fs = require('fs');
-const b = recast.types.builders;
 const code = fs.readFileSync('./main.js', 'utf8');
 const esprima = require('esprima');
 const estraverse = require('estraverse');
-const vm = require('vm');
 
 // Parse the code into an AST
 const ast = recast.parse(code);
@@ -140,11 +138,6 @@ const getCoverage = (functionName, paramsSet) => {
 
     return coverage;
 };
-// formulateoutputjs("output.js","./evaluate.js");
-// const functionInfo = getFunctionInfo('main.js');
-// console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
-//     { values: [1, 0, 0] },
-//     { values: [6, 6, 6] },
-// ]));
+
 
 module.exports.getBranchCoverage = getCoverage;
