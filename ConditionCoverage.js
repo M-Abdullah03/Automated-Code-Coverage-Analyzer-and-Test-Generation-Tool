@@ -5,7 +5,6 @@ const b = recast.types.builders;
 const code = fs.readFileSync('./main.js', 'utf8');
 const esprima = require('esprima');
 const estraverse = require('estraverse');
-const {formulateoutputjs} = require('./prisma.js');
 const {getFunctionInfo} = require('./statementCoverage.js');
 // Parse the code into an AST
 const ast = recast.parse(code);
@@ -91,7 +90,7 @@ const getCoverage = (functionName, paramsSet) => {
     const coverage = (branchCount/branches)*100;
 
     // Restore file
-    //fs.copyFileSync(fileName + '.bak', fileName);
+    fs.copyFileSync(fileName + '.bak', fileName);
 
     return coverage;
 };

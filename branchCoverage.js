@@ -4,7 +4,6 @@ const b = recast.types.builders;
 const code = fs.readFileSync('./main.js', 'utf8');
 const esprima = require('esprima');
 const estraverse = require('estraverse');
-const { formulateoutputjs } = require('./prisma.js');
 const vm = require('vm');
 
 // Parse the code into an AST
