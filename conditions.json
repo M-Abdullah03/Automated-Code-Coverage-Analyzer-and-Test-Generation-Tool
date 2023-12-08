@@ -1,1 +1,1 @@
-[{"condition":"a >0","state":false}]
+[{"condition":"a == 1 && b == 2 || c == 2","state":"both"},{"condition":"a == 0 && b == 2 || c == 3","state":"both"},{"condition":"a == 1","state":"both"},{"condition":"b == 2","state":"both"}]

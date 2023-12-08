@@ -57,7 +57,6 @@ const ranbranches=() => {
 
 const getCoverage = (functionName, paramsSet) => {
 
-
     // Store copy of file
     fs.copyFileSync(fileName, fileName + '.bak');
 
@@ -76,6 +75,9 @@ const getCoverage = (functionName, paramsSet) => {
     // Write all the function calls to the file at once
     fs.appendFileSync(fileName, functionCalls);
     fs.appendFileSync(fileName,`fs.writeFileSync("conditions.json", JSON.stringify(conditions))`);
+
+    delete require.cache[require.resolve('./output.js')];
+
     require('./output.js');
 
     // Run the coverage check

@@ -2,6 +2,7 @@ const fs = require('fs');
 const libCoverage = require('istanbul-lib-coverage');
 const esprima = require('esprima');
 const estraverse = require('estraverse');
+const escodegen = require('escodegen');
 const path = require('path');
 const vm = require('vm');
 const istanbul = require('istanbul');
@@ -94,7 +95,7 @@ const checkCoverage = (testCasesLength) => {
         let fc = coverageMap.fileCoverageFor(f);
         summary.merge(fc.toSummary());
     });
-    console.log(summary.toJSON());
+    //console.log(summary.toJSON());
     let totalStatements = summary.toJSON().statements.total;
     let coveredStatements = summary.toJSON().statements.covered;
     totalStatements = totalStatements - testCasesLength;
@@ -104,25 +105,60 @@ const checkCoverage = (testCasesLength) => {
     //return summary.toJSON().statements.pct;
 };
 
+function getFunctionCalls(node) {
+    let functionCalls = [];
+    estraverse.traverse(node, {
+        enter: function (node) {
+            if (node.type === 'CallExpression' && node.callee.type === 'Identifier') {
+                functionCalls.push(node.callee.name);
+            }
+        }
+    });
+    return functionCalls;
+}
+
+function removeFunctions(code, functionsToKeep) {
+    let ast = esprima.parseScript(code);
+
+    ast = estraverse.replace(ast, {
+        enter: function (node) {
+            if ((node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') &&
+                node.id && !functionsToKeep.includes(node.id.name)) {
+                return this.remove();
+            }
+        }
+    });
+
+    return escodegen.generate(ast);
+}
+
 const getCoverage = (functionName, paramsSet) => {
     // Store copy of file
     fs.copyFileSync(fileName, fileName + '.bak');
 
-    //keep only function of interest
-    // const code = fs.readFileSync(fileName, 'utf8');
-    // const ast = esprima.parseScript(code, { range: true });
-    // let functionNode;
+    //keep only function of interest and all dependent functions
+    // let code = fs.readFileSync(fileName, 'utf8');
+
+    // let ast = esprima.parseScript(code);
+
+    // let functionsToKeep = [];
     // estraverse.traverse(ast, {
-    //     enter: function (node) {
+    //     enter: function (node, parent) {
     //         if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
-    //             if (node.id.name === functionName) {
-    //                 functionNode = node;
+    //             let functionOfInterest = node.id ? node.id.name : parent.id ? parent.id.name : null;
+    //             if (functionName === functionOfInterest) {
+    //                 functionsToKeep.push(functionOfInterest);
+    //                 functionsToKeep.push(...getFunctionCalls(node));
     //             }
     //         }
     //     }
     // });
-    // const functionCode = code.substring(functionNode.range[0], functionNode.range[1]);
-    // fs.writeFileSync(fileName, functionCode);
+
+    // // Remove all other functions
+    // code = removeFunctions(code, functionsToKeep);
+
+    // // Write the code to the file
+    // fs.writeFileSync(fileName, code);
 
     // Build up all the function calls in memory
     const functionCalls = paramsSet.map(params => {
