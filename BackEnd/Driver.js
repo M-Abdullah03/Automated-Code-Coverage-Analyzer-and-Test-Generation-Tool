@@ -8,15 +8,18 @@ const fs = require('fs');
 const writeTestcases= (testCases) => {
     //make jest testcases
     const funcs=getFunctionInfo("./main.js");
-    fs.writeFileSync("./test.js", "const assert = require('assert');\n");    
+
+    fs.writeFileSync("./test.js", "const assert = require('assert');\n"); 
+
     funcs.functionInfo.map((f)=>{
-        fs.appendFileSync("./main.js", `\n\nmodule.exports.${f.functionName} = ${f.functionName};\n`);
+        fs.appendFileSync("./main.js", `\nmodule.exports.${f.functionName} = ${f.functionName};\n`);
         fs.appendFileSync("./test.js", `const {${f.functionName}} = require('./main.js');\n`);
     });
+
     testCases.map((testCase) => {
-        fs.appendFileSync("./test.js", `\ndescribe('test${testCase.functionName}', function() {\n`);
+        fs.appendFileSync("./test.js", `\ndescribe('test${testCase.functionName} for ${testCase.type} coverage', function() {\n`);
         testCase.testCases.map((test, index) => {
-            fs.appendFileSync("./test.js", `\tit('does not throw an error when ${testCase.type} is ${test.values.join(" ")}', function() {\n`);
+            fs.appendFileSync("./test.js", `\tit('does not throw an error when values are ${test.values.join(" ")}', function() {\n`);
             fs.appendFileSync("./test.js", `\t\ttry {\n`);
             fs.appendFileSync("./test.js", `\t\t\t${testCase.functionName}(${test.values.join(", ")});\n`);
             fs.appendFileSync("./test.js", `\t\t} catch (error) {\n`);
@@ -25,11 +28,6 @@ const writeTestcases= (testCases) => {
             fs.appendFileSync("./test.js", `\t});\n`);
         });
         fs.appendFileSync("./test.js", `});\n`);
-        
-
-
-
-
     });
 
 }
@@ -170,6 +168,6 @@ const generateTestCases = (fileName) => {
 
 }
 
-(generateTestCases("./main.js"));
+generateTestCases("./main.js");
 
 module.exports.generateTestCases = generateTestCases;

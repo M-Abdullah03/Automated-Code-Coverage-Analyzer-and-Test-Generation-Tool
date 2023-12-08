@@ -5,10 +5,8 @@ function validateNumbers2(a) {
 
 }
 
-
-
+module.exports.validateNumbers2 = validateNumbers2;
 
 module.exports.validateNumbers2 = validateNumbers2;
 
-
-
+module.exports.validateNumbers2 = validateNumbers2;
