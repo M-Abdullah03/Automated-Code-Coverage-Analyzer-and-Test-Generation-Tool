@@ -1,6 +1,28 @@
-console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
-    { values: [ 1, 2, 2 ] },
-    { values: [ 0, 2, 3 ] },
-    { values: [ 1, 0, 2 ] },
-    { values: [ -1, -1, -2 ] }
-]));
+const {runGA} = require('./GA2.js');
+const {getFunctionInfo} = require('./statementCoverage.js');
+
+const numGenerations = 100;
+const populationSize = 50;
+
+
+const func = getFunctionInfo('main.js');
+
+const literals = func.literals;
+
+
+func.functionInfo.forEach(async (f, i) => {
+    const bestIndividual = await runGA(numGenerations, populationSize, f, literals);
+
+    if(bestIndividual.coverage[0] === 100) {
+        console.log("Function " + f.functionName + " is fully covered");
+
+    } else {
+        console.log("Function " + f.functionName + " is not fully covered");
+    }
+
+    console.log("Best individual: " + bestIndividual.coverage[0] + "%");
+
+    for (let i = 0; i < bestIndividual.set.length; i++) {
+        console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
+    }
+});

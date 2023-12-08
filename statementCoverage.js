@@ -90,7 +90,7 @@ const checkCoverage = () => {
         let fc = coverageMap.fileCoverageFor(f);
         summary.merge(fc.toSummary());
     });
-    console.log(summary.toJSON());
+    //console.log(summary.toJSON());
 
     return summary.toJSON().statements.pct;
 };
@@ -98,6 +98,22 @@ const checkCoverage = () => {
 const getCoverage = (functionName, paramsSet) => {
     // Store copy of file
     fs.copyFileSync(fileName, fileName + '.bak');
+
+    //keep only function of interest
+    const code = fs.readFileSync(fileName, 'utf8');
+    const ast = esprima.parseScript(code, { range: true });
+    let functionNode;
+    estraverse.traverse(ast, {
+        enter: function (node) {
+            if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
+                if (node.id.name === functionName) {
+                    functionNode = node;
+                }
+            }
+        }
+    });
+    const functionCode = code.substring(functionNode.range[0], functionNode.range[1]);
+    fs.writeFileSync(fileName, functionCode);
 
     // Build up all the function calls in memory
     const functionCalls = paramsSet.map(params => {
@@ -129,14 +145,14 @@ const functionInfo = getFunctionInfo('main.js');
 // getCoverage('testConditions', [[1, 1, 2]]);
 
 // Usage
-// console.log(functionInfo);
+console.log(functionInfo);
 
-console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
-    { values: [ 1, 2, 2 ] }
-    // { values: [ 0, 2, 3 ] },
-    // { values: [ 1, 0, 2 ] },
-    // { values: [ -1, -1, -2 ] }
-]));
+// console.log(getCoverage(functionInfo.functionInfo[0].functionName, [
+//     { values: [ 1, 2, 2 ] }
+//     // { values: [ 0, 2, 3 ] },
+//     // { values: [ 1, 0, 2 ] },
+//     // { values: [ -1, -1, -2 ] }
+// ]));
 
 module.exports.getFunctionInfo = getFunctionInfo;
 module.exports.getCoverage = getCoverage;

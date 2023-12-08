@@ -23,6 +23,7 @@ class Individual {
 }
 
 let literals = [];
+let globalbestIndividual=null;
 
 function compareLines(line1, line2) {
     const range = Math.min(line1.lines.length, line2.lines.length);
@@ -212,15 +213,18 @@ function crossover(individual1, individual2) {
 
 async function runGA(numGenerations, population, func_json, lit) {
     const populations = [];
-    let ss = 1;
+    let ss = func_json.returnCount;
 
     literals = lit;
 
     for (let i = 0; i < population; i++) {
         const individual = new Individual();
-        individual.set.push(new Value());
-        for (let j = 0; j < func_json.parametersLength; j++) {
-            individual.set[ss - 1].values.push(0);
+        for (let j = 0; j < ss; j++) {
+            individual.set.push(new Value());
+            individual.set[j].values = [];
+            for (let k = 0; k < func_json.parametersLength; k++) {
+                individual.set[j].values.push(0);
+            }
         }
         generateRandomValues(individual);
         populations.push(individual);
@@ -275,7 +279,7 @@ async function runGA(numGenerations, population, func_json, lit) {
                 }
             }
 
-            let reproduce = Math.floor(population * 0.2);
+            let reproduce = Math.floor(population * 0.5);
             for(let i = 0; i < reproduce; i++) {
                 const prob = Math.floor(Math.random() * 2);
                 if (prob === 0) {
@@ -289,16 +293,27 @@ async function runGA(numGenerations, population, func_json, lit) {
         }
 
         let bestFitness = populations[0].coverage[0];
+        let bestIndividual = populations[0];
 
         for (let i = 0; i < population; i++) {
             const fitness = fitnessFunction(populations[i]);
 
             if (fitness > bestFitness) {
                 bestFitness = fitness;
+                bestIndividual = populations[i];
             }
         }
 
-        if (bestFitness === 100 || populations[0].set.length > 100) {
+        if(globalbestIndividual === null) {
+            globalbestIndividual = bestIndividual;
+        }
+        else {
+            if(bestFitness > fitnessFunction(globalbestIndividual)) {
+                globalbestIndividual = bestIndividual;
+            }
+        }
+
+        if (bestFitness === 100 || populations[0].set.length > 50) {
             break;
         }
 
@@ -313,26 +328,16 @@ async function runGA(numGenerations, population, func_json, lit) {
         }
     }
 
-    let bestFitness = populations[0].coverage[0];
-    let bestIndividual = populations[0];
-
-    for (let i = 0; i < population; i++) {
-        const fitness = fitnessFunction(populations[i]);
-
-        if (fitness > bestFitness) {
-            bestFitness = fitness;
-            bestIndividual = populations[i];
+    for(let i = 0; i < globalbestIndividual.set.length; i++) {
+        for(let j = i+1; j < globalbestIndividual.set.length; j++) {
+            if(JSON.stringify(globalbestIndividual.set[i].values) === JSON.stringify(globalbestIndividual.set[j].values)) {
+                globalbestIndividual.set.splice(j, 1);
+                j--;
+            }
         }
     }
 
-    console.log("Best fitness: " + bestFitness);
-    console.log("Best individual: ");
-
-    for (let i = 0; i < bestIndividual.set.length; i++) {
-        console.log("Set " + i + ": " + bestIndividual.set[i].values.join(" "));
-    }
-
-    return bestIndividual;
+    return globalbestIndividual;
 }
 
 // const numGenerations = 100;
