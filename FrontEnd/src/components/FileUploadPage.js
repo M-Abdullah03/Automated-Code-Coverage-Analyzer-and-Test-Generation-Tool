@@ -15,21 +15,21 @@ const FileUploadPage = () => {
 
         setIsLoading(true);
 
-        // fetch('http://127.0.0.1:3000/coverages'), {
-        //     method: 'POST',
-        //     body: formData,
-        // }
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //         console.log(data);
-        //         localStorage.setItem('coverages', JSON.stringify(data));
-        //         setIsLoading(false);
-        //         navigate('/coverages');
-        //     })
-        //     .catch((error) => {
-        //         console.error('Error:', error);
-        //         setIsLoading(false);
-        //     });
+        fetch('http://127.0.0.1:3000/coverage'), {
+            method: 'POST',
+            body: formData,
+        }
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                localStorage.setItem('coverages', JSON.stringify(data));
+                setIsLoading(false);
+                navigate('/coverages');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                setIsLoading(false);
+            });
     }
 
     const onDrop = (acceptedFiles) => {
