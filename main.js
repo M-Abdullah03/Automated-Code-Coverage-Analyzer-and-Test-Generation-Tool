@@ -1,9 +1,8 @@
 function validateNumbers(a, b, c) {
-  if((a === 0) && (b === 0) ) {
-    return true;
-  }
-  
-
- 
-  
+    if (h == 10) {
+        if (a % 2 != 0 && b % 2 == 0 || c <= 50) {
+            return true;
+        }
+        return false;
+    }
 }

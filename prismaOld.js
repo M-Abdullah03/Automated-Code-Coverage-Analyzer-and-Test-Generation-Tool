@@ -84,15 +84,6 @@ ast.program.body.unshift(
     ])
 );
 
-//add a line at the start of the file to import evaluate.js
-ast.program.body.unshift(
-    b.variableDeclaration("const", [
-        b.variableDeclarator(b.identifier("evaluate"), b.callExpression(
-            b.identifier("require"), [b.literal("./evaluate.js")]
-        ))
-    ])
-);
-
 // Traverse the AST
 
 recast.visit(ast, {
