@@ -6,5 +6,8 @@ function validateNumbers(a) {
 }
 
 function validateNumbers2(a) {
-    validateNumbers(a);
+    if(a>6)
+    {
+        return true;
+    }
 }
