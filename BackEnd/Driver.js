@@ -5,6 +5,36 @@ const {setConditions} = require('./conditionCoverage.js');
 const { formulateoutputjs } = require('./prisma.js');
 const fs = require('fs');
 
+const writeTestcases= (testCases) => {
+    //make jest testcases
+    const funcs=getFunctionInfo("./main.js");
+    fs.writeFileSync("./test.js", "const assert = require('assert');\n");    
+    funcs.functionInfo.map((f)=>{
+        fs.appendFileSync("./main.js", `\n\nmodule.exports.${f.functionName} = ${f.functionName};\n`);
+        fs.appendFileSync("./test.js", `const {${f.functionName}} = require('./main.js');\n`);
+    });
+    testCases.map((testCase) => {
+        fs.appendFileSync("./test.js", `\ndescribe('test${testCase.functionName}', function() {\n`);
+        testCase.testCases.map((test, index) => {
+            fs.appendFileSync("./test.js", `\tit('does not throw an error when ${testCase.type} is ${test.values.join(" ")}', function() {\n`);
+            fs.appendFileSync("./test.js", `\t\ttry {\n`);
+            fs.appendFileSync("./test.js", `\t\t\t${testCase.functionName}(${test.values.join(", ")});\n`);
+            fs.appendFileSync("./test.js", `\t\t} catch (error) {\n`);
+            fs.appendFileSync("./test.js", `\t\t\texpect(false).toBe(true);\n`);
+            fs.appendFileSync("./test.js", `\t\t}\n`);
+            fs.appendFileSync("./test.js", `\t});\n`);
+        });
+        fs.appendFileSync("./test.js", `});\n`);
+        
+
+
+
+
+    });
+
+}
+
+
 const generateTestCases = (fileName) => {
 
     let testCases = [];
@@ -122,7 +152,7 @@ const generateTestCases = (fileName) => {
             testCases: bestIndividual.set
         });
     });
-
+    
     //delete all bak files
     fs.unlinkSync(fileName + '.bak2');
     fs.unlinkSync(fileName + '.bak');
@@ -134,11 +164,12 @@ const generateTestCases = (fileName) => {
     fs.unlinkSync("./conditions.json");
     fs.unlinkSync("./conditions2.json");
     
-
+    writeTestcases(testCases);
+    
     return testCases;
 
 }
 
-// console.log(generateTestCases());
+(generateTestCases("./main.js"));
 
 module.exports.generateTestCases = generateTestCases;
