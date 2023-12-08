@@ -8,3 +8,5 @@ function validateNumbers(a, b, c) {
         return false;
     }
 }
+
+module.exports = validateNumbers;

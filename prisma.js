@@ -98,7 +98,22 @@ ast.program.body.unshift(
 recast.visit(ast, {
     visitIfStatement: function (path) {
         // Get the condition from the if statement
-        concatConditions(path);
+        //concatConditions(path);
+        // Create a call to the evaluate function
+        const condition = recast.print(path.node.test).code;
+        const evaluateCall = b.callExpression(
+            b.identifier('evaluate'),
+            [
+                b.identifier('conditions'),
+                b.literal(condition),
+                b.objectExpression(
+                    condition.match(/[a-z]+/gi).map(variable => 
+                        b.property('init', b.identifier(variable), b.identifier(variable))
+                    )
+                )
+            ]
+        );
+        path.node.test = evaluateCall;
         // Continue the traversal of child nodes
         this.traverse(path);
         // Increment the condition index if at root
