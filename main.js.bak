@@ -1,6 +1,14 @@
 // Your function to test
 const h = 100;
 function validateNumbers(a, b, c) {
+  if((a === 0) && (b === 0) ) {
+    return true;
+  }
+  
+
+ 
+  
+}
 <<<<<<< HEAD
     if (h == 10) {
         while (a % 2 == 0 && b % 2 != 0 || c > 50) {

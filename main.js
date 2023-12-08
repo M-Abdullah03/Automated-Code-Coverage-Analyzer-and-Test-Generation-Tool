@@ -1,5 +1,3 @@
-// Your function to test
-const h = 100;
 function validateNumbers(a, b, c) {
     if (h == 10) {
         if (a % 2 != 0 && b % 2 == 0 || c <= 50) {
