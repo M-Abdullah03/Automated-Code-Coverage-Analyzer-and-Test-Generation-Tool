@@ -45,6 +45,7 @@ const generateTestCases = () => {
         testCases.push({
             functionName: f.functionName,
             type: type,
+            coverage: bestIndividual.coverage[0],
             testCases: bestIndividual.set
         });
     });
@@ -81,6 +82,7 @@ const generateTestCases = () => {
         testCases.push({
             functionName: f.functionName,
             type: type,
+            coverage: bestIndividual.coverage[0],
             testCases: bestIndividual.set
         });
     });
@@ -117,6 +119,7 @@ const generateTestCases = () => {
         testCases.push({
             functionName: f.functionName,
             type: type,
+            coverage: bestIndividual.coverage[0],
             testCases: bestIndividual.set
         });
     });
