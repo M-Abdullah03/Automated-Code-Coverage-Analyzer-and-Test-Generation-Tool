@@ -2,9 +2,9 @@ const recast = require('recast');
 const fs = require('fs');
 const b = recast.types.builders;
 
-let code = fs.readFileSync('./main.js', 'utf8');
+let code ;
 // Parse the code into an AST
-let ast = recast.parse(code);
+let ast;
 
 const concatConditions = (path) => {
     const condition = recast.print(path.node.test).code;

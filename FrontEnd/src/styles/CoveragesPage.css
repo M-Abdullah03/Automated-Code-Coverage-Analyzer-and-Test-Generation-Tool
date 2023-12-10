@@ -36,6 +36,12 @@
     right: 30px;
 }
 
+.exp-btn2 {
+    position: absolute;
+    float: right;
+    right: 150px;
+}
+
 .line-cov {
     width: 175vh;
     height: fit-content;
@@ -45,4 +51,31 @@
 
 .perc-cov {
     width: 175vh;
+}
+
+.stats{
+    display: flex;
+    flex-direction: column;
+}
+.stat-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    margin: 10px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.2rem;
+    color: #000;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+    gap: 10px;
+
+}
+.stat{
+    display: flex;
+    flex-direction: row;
 }
