@@ -10,7 +10,17 @@ import '../styles/CoveragesPage.css'
 const CoveragesPage = () => {
     const [data, setData] = useState([]);
     useEffect(() => {
-        const coverages = JSON.parse(localStorage.getItem('coverages'));
+        let coverages = JSON.parse(localStorage.getItem('coverages'));
+        let conditionalcovg=[];
+        let descisioncovg=[];
+
+        // let groupedData = coverages.reduce((acc, coverage) => 
+        if(coverages.error)
+        {
+            alert("Error in getting coverages");
+            return
+        }
+       
         // const tempData = coverages.map(coverage => ({
         //     name: coverage.type.charAt(0).toUpperCase() + coverage.type.slice(1),
         //     percentage: coverage.coverage
@@ -19,8 +29,8 @@ const CoveragesPage = () => {
         //     name: 'Functional',
         //     percentage: 100
         // });
-
-        const groupedData = coverages.reduce((acc, coverage) => {
+     
+        let groupedData = coverages.reduce((acc, coverage) => {
             const key = coverage.functionName;
             if (!acc[key]) {
                 acc[key] = {
@@ -34,15 +44,70 @@ const CoveragesPage = () => {
                 testCases: coverage.testCases
             });
 
-            acc[key].types.push({
-                name: 'Functional',
-                percentage: 100,
-                testCases: coverage.testCases
-            });
             return acc;
         }, {});
-        const groupedDataArray = Object.values(groupedData);
+        console.log(groupedData);
+    //    for(let i=0;i<coverages.length;i++){
+    //             let x,y;
+    //             groupedData[coverages[i].functionName].types.push({
+    //                 name: "Functional",
+    //                 percentage: 100,
+    //                 testCases: coverages[i].testCases
+    //             });
+    //             groupedData[coverages[i].functionName].types.foreach((element)=>
+    //             {
+    //                 if(element.name=="Condition"){
+    //                     conditionalcovg.push(element.percentage);
+    //                     x=element.percentage;
+    //                 }
+    //                 else if(element.name=="Decision"){
+    //                     descisioncovg.push(element.percentage);
+    //                     y=element.percentage;
+    //                 }
+
+    //             });
+    //             groupedData[coverages[i].functionName].types.push({
+    //                 name: "mcdc",
+    //                 percentage: (x+y)/2,
+    //                 testCases: coverages[i].testCases
+    //             });
+    //         }
+
+
+        let groupedDataArray = Object.values(groupedData);
         console.log(groupedDataArray);
+        groupedDataArray.forEach((element)=>{
+            let x=0,y=0;
+           
+            element.types.push({
+                name: "Functional",
+                percentage: 100,
+                testCases: element.testCases
+            });
+            element.types.forEach((elements)=>
+            {
+                console.log(elements.name);
+                console.log(elements.percentage);
+            
+                if(elements.name=="Condition"){
+                    conditionalcovg.push(elements.percentage);
+                    x=elements.percentage;
+                }
+                else if(elements.name=="Branch"){
+                    descisioncovg.push(elements.percentage);
+                    y=elements.percentage;
+                }
+
+            });
+            element.types.push({
+                name: "mcdc",
+                percentage: (x+y)/2,
+                testCases: element.testCases
+            });
+
+
+        });
+      
         //console.log(tempData);
         setData(groupedDataArray);
     }, []);

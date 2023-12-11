@@ -1,117 +1,72 @@
 const assert = require('assert');
-const {validateNumbers2} = require('./main.js');
-const {validateNumbers} = require('./main.js');
+const {main} = require('./main.js');
 
-describe('testvalidateNumbers2 for statement coverage', function() {
-	it('does not throw an error when values are 7', function() {
+describe('testmain for statement coverage', function() {
+	it('does not throw an error when values are 10 4 479963.1634109808', function() {
 		try {
-			validateNumbers2(7);
+			main(10, 4, 479963.1634109808);
+		} catch (error) {
+			expect(false).toBe(true);
+		}
+	});
+	it('does not throw an error when values are 0 0 -47', function() {
+		try {
+			main(0, 0, -47);
+		} catch (error) {
+			expect(false).toBe(true);
+		}
+	});
+	it('does not throw an error when values are 1 1 1', function() {
+		try {
+			main(1, 1, 1);
 		} catch (error) {
 			expect(false).toBe(true);
 		}
 	});
 });
 
-describe('testvalidateNumbers for statement coverage', function() {
-	it('does not throw an error when values are 6 50 6', function() {
+describe('testmain for branch coverage', function() {
+	it('does not throw an error when values are 1 -1 668293.3131204504', function() {
 		try {
-			validateNumbers(6, 50, 6);
+			main(1, -1, 668293.3131204504);
 		} catch (error) {
 			expect(false).toBe(true);
 		}
 	});
-	it('does not throw an error when values are 10 -468736.23417466425 6', function() {
+	it('does not throw an error when values are 0 0 6', function() {
 		try {
-			validateNumbers(10, -468736.23417466425, 6);
+			main(0, 0, 6);
 		} catch (error) {
 			expect(false).toBe(true);
 		}
 	});
-	it('does not throw an error when values are -26 -5 -26', function() {
+	it('does not throw an error when values are 85 1 6', function() {
 		try {
-			validateNumbers(-26, -5, -26);
-		} catch (error) {
-			expect(false).toBe(true);
-		}
-	});
-});
-
-describe('testvalidateNumbers2 for branch coverage', function() {
-	it('does not throw an error when values are 92759.86810221024', function() {
-		try {
-			validateNumbers2(92759.86810221024);
-		} catch (error) {
-			expect(false).toBe(true);
-		}
-	});
-	it('does not throw an error when values are -5', function() {
-		try {
-			validateNumbers2(-5);
+			main(85, 1, 6);
 		} catch (error) {
 			expect(false).toBe(true);
 		}
 	});
 });
 
-describe('testvalidateNumbers for branch coverage', function() {
-	it('does not throw an error when values are 6 14 -5', function() {
+describe('testmain for condition coverage', function() {
+	it('does not throw an error when values are 14 6 6', function() {
 		try {
-			validateNumbers(6, 14, -5);
+			main(14, 6, 6);
 		} catch (error) {
 			expect(false).toBe(true);
 		}
 	});
-	it('does not throw an error when values are -4 6 -42', function() {
+	it('does not throw an error when values are 1 1 77', function() {
 		try {
-			validateNumbers(-4, 6, -42);
+			main(1, 1, 77);
 		} catch (error) {
 			expect(false).toBe(true);
 		}
 	});
-	it('does not throw an error when values are 94 6 57', function() {
+	it('does not throw an error when values are -20 0 -46', function() {
 		try {
-			validateNumbers(94, 6, 57);
-		} catch (error) {
-			expect(false).toBe(true);
-		}
-	});
-});
-
-describe('testvalidateNumbers2 for condition coverage', function() {
-	it('does not throw an error when values are 6', function() {
-		try {
-			validateNumbers2(6);
-		} catch (error) {
-			expect(false).toBe(true);
-		}
-	});
-	it('does not throw an error when values are 843223.9851670779', function() {
-		try {
-			validateNumbers2(843223.9851670779);
-		} catch (error) {
-			expect(false).toBe(true);
-		}
-	});
-});
-
-describe('testvalidateNumbers for condition coverage', function() {
-	it('does not throw an error when values are 8 6 76', function() {
-		try {
-			validateNumbers(8, 6, 76);
-		} catch (error) {
-			expect(false).toBe(true);
-		}
-	});
-	it('does not throw an error when values are 3 4 6', function() {
-		try {
-			validateNumbers(3, 4, 6);
-		} catch (error) {
-			expect(false).toBe(true);
-		}
-	});
-	it('does not throw an error when values are 6 84 6', function() {
-		try {
-			validateNumbers(6, 84, 6);
+			main(-20, 0, -46);
 		} catch (error) {
 			expect(false).toBe(true);
 		}
