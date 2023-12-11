@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import BarGraph from '../components/BarGraph.js';
 import CoverageTable from '../components/CoverageTable.js';
-import PercCoverages from '../components/PercCoverages.js';
 import LineCoverage from '../components/LineCoverage.js';
 import { Button } from '@mui/material';
 import html2pdf from 'html2pdf.js';
@@ -13,7 +12,7 @@ const CoveragesPage = () => {
         let coverages = JSON.parse(localStorage.getItem('coverages'));
         let conditionalcovg=[];
         let descisioncovg=[];
-        
+
         if(coverages.error)
         {
             alert("Error in getting coverages");
@@ -25,7 +24,7 @@ const CoveragesPage = () => {
             if (!acc[key]) {
                 acc[key] = {
                     name: key,
-                    types: {}
+                    types: []
                 };
             }
             acc[key].types.push({
@@ -54,18 +53,18 @@ const CoveragesPage = () => {
                 console.log(elements.name);
                 console.log(elements.percentage);
             
-                if(elements.name=="Condition"){
+                if(elements.name==="Condition"){
                     conditionalcovg.push(elements.percentage);
                     x=elements.percentage;
                 }
-                else if(elements.name=="Branch"){
+                else if(elements.name==="Branch"){
                     descisioncovg.push(elements.percentage);
                     y=elements.percentage;
                 }
 
             });
             element.types.push({
-                name: "mcdc",
+                name: "MC/DC",
                 percentage: (x+y)/2,
                 testCases: element.testCases
             });

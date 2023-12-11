@@ -18,3 +18,5 @@ function main(a, b, c) {
         c++;
     }
 }
+
+module.exports.main = main;
