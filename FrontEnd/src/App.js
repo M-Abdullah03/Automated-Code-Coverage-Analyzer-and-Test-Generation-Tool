@@ -1,4 +1,6 @@
 import './App.css';
+import './styles/prettify.css';
+import './styles/base.css';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';

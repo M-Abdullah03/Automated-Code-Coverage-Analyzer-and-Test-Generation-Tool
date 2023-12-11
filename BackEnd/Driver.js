@@ -1,17 +1,18 @@
 const { runGA } = require('./GA2.js');
 const { getFunctionInfo, replaceFunction } = require('./statementCoverage.js');
-const {setBranches} = require('./branchCoverage.js');
-const {setConditions} = require('./conditionCoverage.js');
+const { setBranches } = require('./branchCoverage.js');
+const { setConditions } = require('./conditionCoverage.js');
 const { formulateoutputjs } = require('./prisma.js');
 const fs = require('fs');
+const { exec } = require('child_process');
 
-const writeTestcases= (testCases) => {
+const writeTestcases = (testCases) => {
     //make jest testcases
-    const funcs=getFunctionInfo("./main.js");
+    const funcs = getFunctionInfo("./main.js");
 
-    fs.writeFileSync("./test.js", "const assert = require('assert');\n"); 
+    fs.writeFileSync("./test.js", "const assert = require('assert');\n");
 
-    funcs.functionInfo.map((f)=>{
+    funcs.functionInfo.map((f) => {
         fs.appendFileSync("./main.js", `\nmodule.exports.${f.functionName} = ${f.functionName};\n`);
         fs.appendFileSync("./test.js", `const {${f.functionName}} = require('./main.js');\n`);
     });
@@ -86,7 +87,7 @@ const generateTestCases = (fileName) => {
 
         setBranches();
 
-        formulateoutputjs("output.js","./evaluate.js");
+        formulateoutputjs("output.js", "./evaluate.js");
 
         let bestIndividual = runGA(numGenerations, populationSize, f, literals, type);
 
@@ -150,7 +151,7 @@ const generateTestCases = (fileName) => {
             testCases: bestIndividual.set
         });
     });
-    
+
     //delete all bak files
     fs.unlinkSync(fileName + '.bak2');
     fs.unlinkSync(fileName + '.bak');
@@ -161,9 +162,16 @@ const generateTestCases = (fileName) => {
     //delete conditions.json
     fs.unlinkSync("./conditions.json");
     fs.unlinkSync("./conditions2.json");
-    
+
     writeTestcases(testCases);
-    
+    exec("npx nyc --reporter=lcov mocha test.js", (err, stdout, stderr) => {
+        if (err) {
+            console.log(err);
+        }
+        console.log(stdout);
+        console.log(stderr);
+    });
+
     return testCases;
 
 }

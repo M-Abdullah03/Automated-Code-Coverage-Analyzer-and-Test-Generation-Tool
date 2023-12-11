@@ -38,6 +38,8 @@
     "istanbul-lib-coverage": "^3.2.2",
     "istanbul-lib-report": "^3.0.1",
     "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.0.2",
+    "path": "^0.12.7",
     "recast": "^0.23.4"
   }
 }

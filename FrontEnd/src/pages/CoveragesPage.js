@@ -7,25 +7,50 @@ import { Button } from '@mui/material';
 import html2pdf from 'html2pdf.js';
 import '../styles/CoveragesPage.css'
 
-const data = [
-    { name: 'Statements', percentage: 100 },
-    { name: 'Branches', percentage: 90 },
-    { name: 'Decisions', percentage: 75 },
-    { name: 'Conditions', percentage: 85 },
-    { name: 'MCDC', percentage: 70 },
-    { name: 'Functions', percentage: 95 },
-    // add more data as needed
-];
-
 const CoveragesPage = () => {
-
+    const [data, setData] = useState([]);
     useEffect(() => {
         const coverages = JSON.parse(localStorage.getItem('coverages'));
-        console.log(coverages);
+        // const tempData = coverages.map(coverage => ({
+        //     name: coverage.type.charAt(0).toUpperCase() + coverage.type.slice(1),
+        //     percentage: coverage.coverage
+        // }));
+        // tempData.push({
+        //     name: 'Functional',
+        //     percentage: 100
+        // });
+
+        const groupedData = coverages.reduce((acc, coverage) => {
+            const key = coverage.functionName;
+            if (!acc[key]) {
+                acc[key] = {
+                    name: key,
+                    types: []
+                };
+            }
+            acc[key].types.push({
+                name: coverage.type.charAt(0).toUpperCase() + coverage.type.slice(1),
+                percentage: coverage.coverage,
+                testCases: coverage.testCases
+            });
+
+            acc[key].types.push({
+                name: 'Functional',
+                percentage: 100,
+                testCases: coverage.testCases
+            });
+            return acc;
+        }, {});
+        const groupedDataArray = Object.values(groupedData);
+        console.log(groupedDataArray);
+        //console.log(tempData);
+        setData(groupedDataArray);
     }, []);
-    
-    const exportPDF = () => {
+
+    const exportPDF = async () => {
         const element = document.querySelector('.coverage');
+        //remove button from pdf
+        element.querySelector('.exp-btn').setAttribute('style', 'display: none');
         const opt = {
             margin: 1,
             filename: 'CoverageReport.pdf',
@@ -33,8 +58,30 @@ const CoveragesPage = () => {
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'in', format: 'Tabloid', orientation: 'landscape' }
         };
-        html2pdf().from(element).set(opt).save();
+        await html2pdf().from(element).set(opt).save();
+        //add button back
+        element.querySelector('.exp-btn').setAttribute('style', 'display: block');
+
     };
+
+    const getTests = () => {
+        fetch('http://localhost:3000/getTests')
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                // the filename you want
+                a.download = 'test.js';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
 
     return (
         <>
@@ -42,12 +89,22 @@ const CoveragesPage = () => {
                 <div className='heading'>
                     <h1>Coverage Report</h1>
                     <Button className='exp-btn' onClick={exportPDF}>Export PDF</Button>
+                    <Button className='exp-btn2' onClick={getTests}>Get Tests</Button>
                 </div>
                 <div className='top'>
-                    <BarGraph data={data} />
-                    <CoverageTable data={data} />
+                    <div className='stats'>
+                        {data.length > 0 && data.map((coverage, index) => (
+                            <div className='stat-card'>
+                                <h1>{coverage.name}</h1>
+                                <div className='stat'>
+                                    <BarGraph key={index} data={coverage.types} />
+                                    <CoverageTable key={index} data={coverage.types} />
+                                </div>
+                            </div>
+                        ))
+                        }
+                    </div>
                 </div>
-                <PercCoverages />
                 <LineCoverage />
             </div>
         </>

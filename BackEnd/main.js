@@ -3,11 +3,14 @@ function validateNumbers2(a) {
         return true;
     }
 }
-function validateNumbers(a) {
-    validateNumbers2(a + 1);
+
+function validateNumbers(a,b,c){
+    if(a>6){
+        return true;
+    }
+    else if(b>6){
+        return true;
+    }
+    else 
+        return false;
 }
-function validateNumbers3(a) {
-    validateNumbers(a + 1);
-}
-let a = 0;
-validateNumbers(1);
