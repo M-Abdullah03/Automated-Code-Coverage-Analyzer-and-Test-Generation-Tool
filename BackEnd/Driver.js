@@ -17,9 +17,9 @@ const writeTestcases= (testCases) => {
     });
 
     testCases.map((testCase) => {
-        fs.appendFileSync("./test.js", `\ndescribe('test${testCase.functionName} for ${testCase.type} coverage', function() {\n`);
+        fs.appendFileSync("./test.js", `\ndescribe('Testing ${testCase.functionName} for ${testCase.type} coverage of ${testCase.coverage}%', function() {\n`);
         testCase.testCases.map((test, index) => {
-            fs.appendFileSync("./test.js", `\tit('does not throw an error when values are ${test.values.join(" ")}', function() {\n`);
+            fs.appendFileSync("./test.js", `\tit('runs for values ${test.values.join(", ")}', function() {\n`);
             fs.appendFileSync("./test.js", `\t\ttry {\n`);
             fs.appendFileSync("./test.js", `\t\t\t${testCase.functionName}(${test.values.join(", ")});\n`);
             fs.appendFileSync("./test.js", `\t\t} catch (error) {\n`);
@@ -49,7 +49,7 @@ const generateTestCases = (fileName) => {
     func.functionInfo.map((f) => {
         //create copy of file
         fs.copyFileSync(fileName, fileName + '.bak2');
-        replaceFunction(f.functionName, fileName);
+        replaceFunction(f.functionName, fileName, 0);
 
         let bestIndividual = runGA(numGenerations, populationSize, f, literals, type);
 
@@ -82,7 +82,7 @@ const generateTestCases = (fileName) => {
     func.functionInfo.map((f) => {
         //create copy of file
         fs.copyFileSync(fileName, fileName + '.bak2');
-        replaceFunction(f.functionName, fileName);
+        replaceFunction(f.functionName, fileName, 0);
 
         setBranches();
 
@@ -119,7 +119,7 @@ const generateTestCases = (fileName) => {
     func.functionInfo.map((f) => {
         //create copy of file
         fs.copyFileSync(fileName, fileName + '.bak2');
-        replaceFunction(f.functionName, fileName);
+        replaceFunction(f.functionName, fileName, 0);
 
         setConditions();
 
@@ -168,6 +168,6 @@ const generateTestCases = (fileName) => {
 
 }
 
-generateTestCases("./main.js");
+generateTestCases("main.js");
 
 module.exports.generateTestCases = generateTestCases;

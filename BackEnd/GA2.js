@@ -222,9 +222,7 @@ function runGA(numGenerations, population, func_json, lit, type) {
         ss = func_json.returnCount;
 
     literals = lit;
-
-    //console.log("function name: " + func_json.functionName + " parameters: " + func_json.parametersLength);
-
+    
     for (let i = 0; i < population; i++) {
         const individual = new Individual();
         for (let j = 0; j < ss; j++) {

@@ -8,33 +8,36 @@ const istanbul = require('istanbul');
 const vm = require('vm');
 
 let fileName;
+let functionsToKeep = [];
 
-const replaceFunction = (functionName, fileName) => {
+const replaceFunction = (functionName, fileName, start) => {
     //keep only function of interest and all dependent functions
     let code = fs.readFileSync(fileName, 'utf8');
 
     let ast = esprima.parseScript(code);
 
-    let functionsToKeep = [];
     estraverse.traverse(ast, {
         enter: function (node, parent) {
             if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
                 let functionOfInterest = node.id ? node.id.name : parent.id ? parent.id.name : null;
                 if (functionName === functionOfInterest) {
                     functionsToKeep.push(functionOfInterest);
-                    functionsToKeep.push(...getFunctionCalls(node));
+                    getFunctionCalls(node, fileName, start);
                 }
             }
         }
     });
 
     // Remove all other functions
-    code = removeFunctions(code, functionsToKeep);
+    if (start === 0) {
+        code = removeFunctions(code, functionsToKeep);
 
-    // Write the code to the file
-    fs.writeFileSync(fileName, code);
+        // Write the code to the file
+        fs.writeFileSync(fileName, code);
+
+        functionsToKeep = [];
+    }
 }
-
 
 const getFunctionInfo = (filename) => {
     fileName = filename;
@@ -137,16 +140,14 @@ const checkCoverage = (testCasesLength) => {
     return statementCoverage;
 };
 
-function getFunctionCalls(node) {
-    let functionCalls = [];
+function getFunctionCalls(node, fileName, start) {
     estraverse.traverse(node, {
         enter: function (node) {
             if (node.type === 'CallExpression' && node.callee.type === 'Identifier') {
-                functionCalls.push(node.callee.name);
+                replaceFunction(node.callee.name, fileName, start + 1);
             }
         }
     });
-    return functionCalls;
 }
 
 function removeFunctions(code, functionsToKeep) {

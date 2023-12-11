@@ -1,12 +1,13 @@
 function validateNumbers2(a) {
-    if (a > 6) {
+    if (a >6) {
         return true;
     }
-
 }
-
-module.exports.validateNumbers2 = validateNumbers2;
-
-module.exports.validateNumbers2 = validateNumbers2;
-
-module.exports.validateNumbers2 = validateNumbers2;
+function validateNumbers(a) {
+    validateNumbers2(a + 1);
+}
+function validateNumbers3(a) {
+    validateNumbers(a + 1);
+}
+let a = 0;
+validateNumbers(1);

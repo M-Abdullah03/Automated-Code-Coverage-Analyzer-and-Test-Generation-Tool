@@ -21,9 +21,8 @@ app.use(cors());
 app.listen(port, () => console.log(`Server running on port ${port}`));
 
 app.post('/coverage', upload.single('file'), (req, res) => {
-    console.log(req.file);
+    // console.log(req.file);
     const result = generateTestCases('main.js');
-
 
     // Return the results
     res.json(result);
