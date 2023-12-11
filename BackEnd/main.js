@@ -1,20 +1,20 @@
-function validateNumbers2(a) {
-    if (a >6) {
-        return true;
+function main(a, b, c) {
+    while (a > 6) {
+        a--;
+    }
+    switch (b) {
+    case 0:
+        b++;
+        break;
+    case 1:
+        b--;
+        break;
+    default:
+        break;
+    }
+    if (c > 6) {
+        c--;
+    } else {
+        c++;
     }
 }
-
-function validateNumbers(a, b) {
-    if(a>6){
-        return true;
-    }
-    else if(b>6){
-        return true;
-    }
-    else 
-        return false;
-}
-
-module.exports.validateNumbers2 = validateNumbers2;
-
-module.exports.validateNumbers = validateNumbers;
