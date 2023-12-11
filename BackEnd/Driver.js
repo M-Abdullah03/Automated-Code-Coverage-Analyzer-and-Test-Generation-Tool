@@ -176,6 +176,6 @@ const generateTestCases = (fileName) => {
 
 }
 
-generateTestCases("main.js");
+// generateTestCases("main.js");
 
 module.exports.generateTestCases = generateTestCases;

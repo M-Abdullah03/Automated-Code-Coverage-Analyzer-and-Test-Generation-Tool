@@ -2,116 +2,116 @@ const assert = require('assert');
 const {validateNumbers2} = require('./main.js');
 const {validateNumbers} = require('./main.js');
 
-describe('testvalidateNumbers2 for statement coverage', function() {
-	it('does not throw an error when values are 7', function() {
+describe('Testing validateNumbers2 for statement coverage of 100%', function() {
+	it('runs for values 461810.0971004145', function() {
 		try {
-			validateNumbers2(7);
+			validateNumbers2(461810.0971004145);
 		} catch (error) {
 			expect(false).toBe(true);
 		}
 	});
 });
 
-describe('testvalidateNumbers for statement coverage', function() {
-	it('does not throw an error when values are 6 50 6', function() {
+describe('Testing validateNumbers for statement coverage of 100%', function() {
+	it('runs for values 1, 30', function() {
 		try {
-			validateNumbers(6, 50, 6);
+			validateNumbers(1, 30);
 		} catch (error) {
 			expect(false).toBe(true);
 		}
 	});
-	it('does not throw an error when values are 10 -468736.23417466425 6', function() {
+	it('runs for values 6, -2', function() {
 		try {
-			validateNumbers(10, -468736.23417466425, 6);
+			validateNumbers(6, -2);
 		} catch (error) {
 			expect(false).toBe(true);
 		}
 	});
-	it('does not throw an error when values are -26 -5 -26', function() {
+	it('runs for values 166047.7167617208, 6', function() {
 		try {
-			validateNumbers(-26, -5, -26);
-		} catch (error) {
-			expect(false).toBe(true);
-		}
-	});
-});
-
-describe('testvalidateNumbers2 for branch coverage', function() {
-	it('does not throw an error when values are 92759.86810221024', function() {
-		try {
-			validateNumbers2(92759.86810221024);
-		} catch (error) {
-			expect(false).toBe(true);
-		}
-	});
-	it('does not throw an error when values are -5', function() {
-		try {
-			validateNumbers2(-5);
+			validateNumbers(166047.7167617208, 6);
 		} catch (error) {
 			expect(false).toBe(true);
 		}
 	});
 });
 
-describe('testvalidateNumbers for branch coverage', function() {
-	it('does not throw an error when values are 6 14 -5', function() {
-		try {
-			validateNumbers(6, 14, -5);
-		} catch (error) {
-			expect(false).toBe(true);
-		}
-	});
-	it('does not throw an error when values are -4 6 -42', function() {
-		try {
-			validateNumbers(-4, 6, -42);
-		} catch (error) {
-			expect(false).toBe(true);
-		}
-	});
-	it('does not throw an error when values are 94 6 57', function() {
-		try {
-			validateNumbers(94, 6, 57);
-		} catch (error) {
-			expect(false).toBe(true);
-		}
-	});
-});
-
-describe('testvalidateNumbers2 for condition coverage', function() {
-	it('does not throw an error when values are 6', function() {
+describe('Testing validateNumbers2 for branch coverage of 100%', function() {
+	it('runs for values 6', function() {
 		try {
 			validateNumbers2(6);
 		} catch (error) {
 			expect(false).toBe(true);
 		}
 	});
-	it('does not throw an error when values are 843223.9851670779', function() {
+	it('runs for values 55', function() {
 		try {
-			validateNumbers2(843223.9851670779);
+			validateNumbers2(55);
 		} catch (error) {
 			expect(false).toBe(true);
 		}
 	});
 });
 
-describe('testvalidateNumbers for condition coverage', function() {
-	it('does not throw an error when values are 8 6 76', function() {
+describe('Testing validateNumbers for branch coverage of 100%', function() {
+	it('runs for values 6, 75', function() {
 		try {
-			validateNumbers(8, 6, 76);
+			validateNumbers(6, 75);
 		} catch (error) {
 			expect(false).toBe(true);
 		}
 	});
-	it('does not throw an error when values are 3 4 6', function() {
+	it('runs for values 95, 6', function() {
 		try {
-			validateNumbers(3, 4, 6);
+			validateNumbers(95, 6);
 		} catch (error) {
 			expect(false).toBe(true);
 		}
 	});
-	it('does not throw an error when values are 6 84 6', function() {
+	it('runs for values 6, -1', function() {
 		try {
-			validateNumbers(6, 84, 6);
+			validateNumbers(6, -1);
+		} catch (error) {
+			expect(false).toBe(true);
+		}
+	});
+});
+
+describe('Testing validateNumbers2 for condition coverage of 100%', function() {
+	it('runs for values 6', function() {
+		try {
+			validateNumbers2(6);
+		} catch (error) {
+			expect(false).toBe(true);
+		}
+	});
+	it('runs for values 35', function() {
+		try {
+			validateNumbers2(35);
+		} catch (error) {
+			expect(false).toBe(true);
+		}
+	});
+});
+
+describe('Testing validateNumbers for condition coverage of 100%', function() {
+	it('runs for values -5, 4', function() {
+		try {
+			validateNumbers(-5, 4);
+		} catch (error) {
+			expect(false).toBe(true);
+		}
+	});
+	it('runs for values 6, 84', function() {
+		try {
+			validateNumbers(6, 84);
+		} catch (error) {
+			expect(false).toBe(true);
+		}
+	});
+	it('runs for values 19, 47', function() {
+		try {
+			validateNumbers(19, 47);
 		} catch (error) {
 			expect(false).toBe(true);
 		}

@@ -20,29 +20,43 @@ const CoveragesPage = () => {
         //     percentage: 100
         // });
 
-        const groupedData = coverages.reduce((acc, coverage) => {
+        const data = [ /* your data */];
+
+        // Group data by functionName and type
+        const groupedData = data.reduce((acc, coverage) => {
             const key = coverage.functionName;
             if (!acc[key]) {
                 acc[key] = {
                     name: key,
-                    types: []
+                    types: {}
                 };
             }
-            acc[key].types.push({
-                name: coverage.type.charAt(0).toUpperCase() + coverage.type.slice(1),
-                percentage: coverage.coverage,
-                testCases: coverage.testCases
-            });
-
-            acc[key].types.push({
-                name: 'Functional',
-                percentage: 100,
-                testCases: coverage.testCases
-            });
+            acc[key].types[coverage.type] = coverage;
             return acc;
         }, {});
-        const groupedDataArray = Object.values(groupedData);
-        console.log(groupedDataArray);
+
+        // Calculate MC/DC for each function
+        Object.values(groupedData).forEach(functionData => {
+            const conditionCoverage = functionData.types.condition ? functionData.types.condition.coverage : 0;
+            const decisionCoverage = functionData.types.branch ? functionData.types.branch.coverage : 0;
+            const mcdcCoverage = (conditionCoverage + decisionCoverage) / 2;
+            functionData.types.mcdc = {
+                type: 'MC/DC',
+                coverage: mcdcCoverage,
+                testCases: [] // Add appropriate test cases if available
+            };
+            functionData.types.mcdc = {
+                type: 'Functional',
+                coverage: 100,
+                testCases: [] // Add appropriate test cases if available
+            };
+        });
+
+        console.log(groupedData);
+        let groupedDataArray = Object.values(groupedData);
+        setData(groupedDataArray);
+
+        console.log(groupedData);
         //console.log(tempData);
         setData(groupedDataArray);
     }, []);

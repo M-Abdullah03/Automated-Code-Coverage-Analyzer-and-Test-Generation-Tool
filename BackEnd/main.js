@@ -4,7 +4,7 @@ function validateNumbers2(a) {
     }
 }
 
-function validateNumbers(a,b,c){
+function validateNumbers(a, b) {
     if(a>6){
         return true;
     }
@@ -14,3 +14,7 @@ function validateNumbers(a,b,c){
     else 
         return false;
 }
+
+module.exports.validateNumbers2 = validateNumbers2;
+
+module.exports.validateNumbers = validateNumbers;
